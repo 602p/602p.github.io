@@ -1,0 +1,20 @@
+.u-text-centered{
+	text-align: center;
+}
+
+.u-block-centered{
+	margin:auto;
+}
+
+#main-block{
+	box-shadow: 10px 10px 5px #888888;
+	background-color: white;
+}
+
+body{
+	background-color: #88eeff;
+}
+
+.five.pct.tall{margin-top: 5%;}
+.ten.pct.tall{margin-top: 10%;}
+.fifteen.pct.tall{margin-top: 15%;}
