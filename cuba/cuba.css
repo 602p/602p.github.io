@@ -1,0 +1,41 @@
+.tag-relief{
+	background-color: #ff4444;
+}
+
+.tag-recovery{
+	background-color: #44ff44;
+}
+
+.tag-reform{
+	background-color: #4444ff;
+}
+
+.title-tag{
+	border-radius:3px;
+	margin-left:3px;
+	font-weight: bold;
+}
+
+.sel-box{
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+#help{
+	border-width: 1px;
+	border-color: black;
+	border-style: solid;
+	border-radius: 10px;
+}
+
+.modal{
+	z-index: 2147483647;
+}
+
+.vis-item.vis-selected{
+	z-index: 0 !important;
+}
+
+.modal{
+	max-width: 60% !important;
+}
