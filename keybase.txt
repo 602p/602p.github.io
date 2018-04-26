@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/602p
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://louis.goessling.com
+  * I am 602p (https://keybase.io/602p) on keybase.
+  * I have a public key ASBR9rX55_VN4fdskGOq9yhh9ys7l9RKuLxBXMpH91vCQAo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "012051f6b5f9e7f54de1f76c9063aaf72861f72b3b97d44ab8bc415cca47f75bc2400a",
+      "host": "keybase.io",
+      "kid": "012051f6b5f9e7f54de1f76c9063aaf72861f72b3b97d44ab8bc415cca47f75bc2400a",
+      "uid": "44bb4ad387765dccc3ef4f7421408b19",
+      "username": "602p"
+    },
+    "merkle_root": {
+      "ctime": 1524701464,
+      "hash": "975ff64091fb206ebf1bee5ba49ed77418fff1f8d27cb5044dff71844dd6306f7ff288965ca46aef4b8de69519eaacfb5af4e31ff6e7a7a744566d5f3ee7d906",
+      "hash_meta": "cee587cb56da3843de385e5e77ed946859d2c7f4d25c0e831ca94f1244d54e14",
+      "seqno": 2442780
+    },
+    "service": {
+      "entropy": "E7FPz4Vs49QqdhgUnFmpLCsA",
+      "hostname": "louis.goessling.com",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "1.0.47"
+  },
+  "ctime": 1524701472,
+  "expire_in": 504576000,
+  "prev": "a25703f96895260101c6fb30cae51d089ae79e06c0ba8f9b2918b9be913bc531",
+  "seqno": 5,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgUfa1+ef1TeH3bJBjqvcoYfcrO5fUSri8QVzKR/dbwkAKp3BheWxvYWTESpcCBcQgolcD+WiVJgEBxvswyuUdCJrnngbAuo+bKRi5vpE7xTHEIBHHsM/hBjHsrob0Xsa+qgSnNybpThsZbSmTN1eho29WAgHCo3NpZ8RApUt6UZz7yEt81wMJno6A9b2PdHLTYQDxlEJCytcQ/lEKeT7f4SyNSdJAMbQPuWaszKsYp8qymHxgW4ZV0DUZBKhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIMpbb+mabY+H7trO02cebnWUMSdrKH7Rb8UL1nnA2vBzo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/602p
+
+==================================================================
