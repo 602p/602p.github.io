@@ -12,11 +12,11 @@
 
 @media screen{
 	#main-block{
-		box-shadow: 10px 10px 5px #888888;
+		box-shadow: 30px 30px 10px #333333;
 	}
 
 	body{
-		background-color: #88eeff;
+		background-color: #7777ff;
 	}
 }
 
