@@ -7,8 +7,7 @@
 }
 
 .tooltipd{
-	text-decoration:underline;
-	text-decoration-style:dashed;
+	text-decoration: underline dashed;
 }
 
 .five.pct.tall{margin-top: 5%;}

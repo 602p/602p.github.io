@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Louis Goessling</title>
+		<title>Actionwriter Conversion (louis.goessling.com)</title>
 		<link rel="stylesheet" type="text/css" href="../../css/normalize.css">
 		<link rel="stylesheet" type="text/css" href="../../css/skeleton.css">
 		<link rel="stylesheet" type="text/css" href="../../css/util.css">
@@ -49,7 +49,7 @@
 						<button id="keyboard-matrix-playpause">Pause</button>&nbsp;&nbsp;<button id="keyboard-matrix-step">Step</button>
 					</div>
 
-					<p>The principle of a keyboard matrix is that we can select which out of a number of switches in parallel we want to read by driving the input of only one of them. This can then be extended to select a number of switches, each with their own input line. In this manner, if we have <code>n</code> I/O lines we can read <code>floor((n/2)^2)</code> switches. The downside is that to read the state of all the switches we must go through a cycle of scanning each of the <code>floor(n/2)</code> banks of switches.</p>
+					<p>The principle of a keyboard matrix is that we can select which out of a number of switches in parallel we want to read by driving the input of only one of them. This can then be extended to select a number of switches, each with their own input line. In this manner, if we have <code>n</code> I/O lines we can read <code>&lfloor;(n/2)^2&rfloor;</code> switches. The downside is that to read the state of all the switches we must go through a cycle of scanning each of the <code>&lfloor;n/2&rfloor;</code> banks of switches.</p>
 
 					<p>The animation to the right depicts a matrix of 16 keys, where <code>O</code> represents open and <code>X</code> represents closed. As the selected column scans across each of the four (indicated by capitalization) we read each of the four rows, filling out columns in out table that eventually holds a complete image of the state of the keyboard. It's a lot like addressing a 2-dimensional array. Some helpful articles I read about this scheme are <a href="http://pcbheaven.com/wikipages/How_Key_Matrices_Works/">here</a> and <a href="http://blog.komar.be/how-to-make-a-keyboard-the-matrix/">here</a>. Code for this process is pretty simple and looks like: <br/>
 
@@ -75,6 +75,26 @@
 
 					<h5>Multiplexing our Matrix</h5>
 
+					<p>There is a pretty elegant solution to this problem. I bought a couple 8:1 de/multiplexers on DigiKey (part nr. <a href="https://www.digikey.com/product-detail/en/texas-instruments/CD4051BE/296-2057-5-ND/67305"><code>CD4051BE</code></a>.) These guys allow you to control which of their eight output pins are electrically connected to their one input pin by driving it's address lines. A de/multiplexer with <code>n</code> address lines allows selection between <code>2^n</code> different lines, so for an mux with eight lines there are <code>log<sub>2</sub>(8) = 3</code> address lines. Because we actually only ever want to drive the selected column <span class="tooltipd" title="This is how I did it at first, the same principle applies if you want to drive it low, which is what I ended up doing.">high</span>, and there is no reason we would want to not select <i>any</i> column, we don't actually need to spend an I/O pin on the input to the mux, we can just connect it to +3v3.</p>
+
+					<p>I've called this chip a de/mux because it can be used to either control which of eight outputs is attached to an input as well as be used to control which of eight inputs is attached to an output. It's best thought of as a rotary switch connecting the one pin to one of the eight - this connection is bidirectional. Because of this, we can use it to select between which of the eight rows of the matrix we want to read - so we can use <code>log<sub>2</sub>(8) = 3</code> lines for address select and one for input to read all eight rows.</p>
+
+					<p>It's not quite that simple for selecting our column, because there are not eight columns, but 13. 13 isn't even a power of 2! To select which of the 13 columns to light up, we will need to use <code>&lceil;log<sub>2</sub>(13)&rceil; = 4</code> address bits. We also need some way to join two 8:1 muxes into a 16:1 mux. We can do this with a discrete transistor acting as a NOT gate. These multiplexers have a disable pin, which means that the one pin is disconnected from all of the eight. If we connect the high address bit to the disable pin of one mux, and the logical inverse of the high address bit to the disable of the other mux we can use it to switch between them. Then, we connect the low three address bits to the address inputs of both muxes, joining them together into a 16:1 multiplexer. Selecting which column to light up is as simple as writing the bits of it's index out to the address channels:
+
+					<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">writeColAddress</span>(<span style="color: #333399; font-weight: bold">int</span> address){
+  <span style="color: #008800; font-weight: bold">if</span>(<span style="color: #333333">!</span>((address<span style="color: #333333">&gt;=</span><span style="color: #0000DD; font-weight: bold">0</span>)<span style="color: #333333">&amp;&amp;</span>(address<span style="color: #333333">&lt;=</span><span style="color: #0000DD; font-weight: bold">15</span>))){
+    error();
+  }
+
+  digitalWrite(ADDRESS_PINS[<span style="color: #0000DD; font-weight: bold">0</span>],  bitRead(address, <span style="color: #0000DD; font-weight: bold">0</span>));
+  digitalWrite(ADDRESS_PINS[<span style="color: #0000DD; font-weight: bold">1</span>],  bitRead(address, <span style="color: #0000DD; font-weight: bold">1</span>));
+  digitalWrite(ADDRESS_PINS[<span style="color: #0000DD; font-weight: bold">2</span>],  bitRead(address, <span style="color: #0000DD; font-weight: bold">2</span>));
+  digitalWrite(ADDRESS_PINS[<span style="color: #0000DD; font-weight: bold">3</span>],  bitRead(address, <span style="color: #0000DD; font-weight: bold">3</span>));
+}
+</pre></div>
+
+
+					</p>
 
 					<hr/>
 					<p><b>CC-BY-* credits</b><ul><li>New Window/Popup icon by Denis Klyuchnikov from the Noun Project</li><li>Buckling Spring diagram by <span class="tooltipd" title="User deleted, Wikimedia user page is a redlink - so removed here.">Shaddim</span> - <span class="int-own-work" lang="en">Own work</span>, <a href="https://creativecommons.org/licenses/by-sa/3.0" title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=30568410">Link</a></li></ul></p>
