@@ -83,4 +83,8 @@ $(function(){
     $(document).ready(function() {
         $('.popup').magnificPopup({type:'image'});
     });
+
+    $(".tooltipd").click(function(){
+        alert($(this).attr("title"));
+    })
 });
