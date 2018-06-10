@@ -1,0 +1,26 @@
+#bucklespring-image{
+	width: 100%;
+}
+
+#bucklespring-image-container{
+	width: 20%;
+	float: right;
+	background-color: #cccccc;
+	padding: 0.5%;
+	text-align: center;
+}
+
+#keyboard-matrix-container{
+	float: right;
+	background-color: #cccccc;
+	padding: 0.5%;
+}
+
+.popup:after {
+    content: "";
+    display: inline-block;
+    background: url("popout.svg") no-repeat;
+    width: 15px;
+    height: 15px;
+    margin-right: -5px;
+}

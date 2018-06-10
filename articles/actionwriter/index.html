@@ -1,0 +1,80 @@
+<html>
+	<head>
+		<title>Louis Goessling</title>
+		<link rel="stylesheet" type="text/css" href="../../css/normalize.css">
+		<link rel="stylesheet" type="text/css" href="../../css/skeleton.css">
+		<link rel="stylesheet" type="text/css" href="../../css/util.css">
+		<link rel="stylesheet" href="../../css/magnific-popup.css">
+		<link rel="stylesheet" type="text/css" href="actionwriter.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="../../js/magnific-popup.min.js"></script>
+		<script src="anim.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="five pct tall"></div>
+			<div class="row">
+				<div class="twelve columns">
+					<div class="u-block-centered">
+						<h2>Actionwriter keyboard conversion for PC</h2>
+						<b>or, how to get a Model M<sup>ish</sup> for only $10<sup>ish</sup></b>
+					</div>
+					<br/>
+
+					<p>I'm a fan of mechanical keyboards. Now, I'm nowhere near as rabid of a fan as others who will hundreds of dollars on them (I'm actually kind of a cheapskate) but I have always wanted to own a Model M. I also have something of a soft spot for old typewriters, and I buy them at garage sales when I can. Of course, the logical intersection of these two interests is typewriter keyboards. A lot of old electromechanical typewriters have cool keyboards - both for the switches and the layout. I found an IBM Actionwriter 1 at a garage sale and these are the notes of how I've turned it's keyboard into a PC-compatible USB keyboard.</p>
+					
+					<div id="bucklespring-image-container">
+						How a buckling spring keyswitch looks and sounds:
+						<img id="bucklespring-image" src="bucklespring.gif" alt="Buckling spring keyswitch diagrammatic animation">
+						<audio controls>
+							<source src="bucklespring_sound.ogg" type="audio/ogg">
+							Audio tag is not supported in this browser.
+						</audio>
+					</div>
+
+					<p>The venerable Actionwriter is a electromechanical typewriter, meaning it has a keyboard that is connected to a microcontroller that in turn drives the mechanical equipment doing the type-writing. Most importantly, being a genuine 1985 West Germany-made IBM product it had a buckling spring keyboard. If you aren't up to date on <span class="tooltipd" title="This is the part of the keyboard that turns the motion of the peice of plastic with the letter printed on it into an electronically-readable signal">keyswitch</span> types, the buckling-spring is something of a holy grail (IMO, at least.) They have a great kinetic feel and are gloriously clicky. Unfortunately, Model Ms are <span class="tooltipd" title="I know, $100 isn't that expensive - but hey, I'm a student, and you remember the cheapskate comment">kinda</span> expensive because no matter how you cut it you have to have one of these complicated little assemblies for each key. </p>
+
+					<h5>How does this thing connect, anyway?</h5>
+
+					<p>The first step was to pop the top off the typewriter and take a closer look at the keyboard. The typewriter hides it's guts between two halves of a plastic shell that pop apart neatly to reveal it's <a class="popup" href="ceilrootn.gif">inner workings</a>. The keyboard itself then can be unplugged from the main <span class="tooltipd" title="Printed Circuit Board">PCB</span> by removing the three connectors. The keyboard is built on top of a single <a class="popup" href="ceilrootn.gif">curved metal piece</a> that also has a cutout to hold the status LEDs. The ribbon cable for driving the LEDs is one of the connectors back to the PCB. The other two are "Flexible Flat Cables" (FFCs) - you may have had the displeasure of working with these if you've ever torn apart a laptop or similarly compact device. These FFCs are not actually so bad - the cables and their contacts are <a class="popup" href="ceilrootn.gif">pretty big</a>.</p>
+
+					<p>The microprocessor on the board in the Actionwriter is some sort of <b>80xx (CHIP?)</b> but the keyboard interface is obviously not PS/2, AT, or even that weird one that looks like SATA. A keyboard has to have a switch somewhere inside it for every key, but it would be absurd to wire every switch to it's own line, even if only between the switch and microcontroller - I/O pins are expensive! Manufacturers wire the keys together in a "keyboard matrix" to enable reading all of the inputs with a reasonable number of I/O lines. The keyboard, intended to be used only in the typewriter, exposed only the raw keyboard matrix lines.</p>
+
+					<h5>Reading a keyboard matrix</h5>
+
+					<div id="keyboard-matrix-container">
+						<pre id="keyboard-matrix-animation">LOADING</pre>
+						<button id="keyboard-matrix-playpause">Pause</button>&nbsp;&nbsp;<button id="keyboard-matrix-step">Step</button>
+					</div>
+
+					<p>The principle of a keyboard matrix is that we can select which out of a number of switches in parallel we want to read by driving the input of only one of them. This can then be extended to select a number of switches, each with their own input line. In this manner, if we have <code>n</code> I/O lines we can read <code>floor((n/2)^2)</code> switches. The downside is that to read the state of all the switches we must go through a cycle of scanning each of the <code>floor(n/2)</code> banks of switches.</p>
+
+					<p>The animation to the right depicts a matrix of 16 keys, where <code>O</code> represents open and <code>X</code> represents closed. As the selected column scans across each of the four (indicated by capitalization) we read each of the four rows, filling out columns in out table that eventually holds a complete image of the state of the keyboard. It's a lot like addressing a 2-dimensional array. Some helpful articles I read about this scheme are <a href="http://pcbheaven.com/wikipages/How_Key_Matrices_Works/">here</a> and <a href="http://blog.komar.be/how-to-make-a-keyboard-the-matrix/">here</a>. Code for this process is pretty simple and looks like: <br/>
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333399; font-weight: bold">bool</span> state[NR_ROWS][NR_COLS];
+...
+<span style="color: #333399; font-weight: bold">void</span> update_state(){
+	memset(state, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #008800; font-weight: bold">sizeof</span> state);
+	<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> col<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; col<span style="color: #333333">&lt;</span>NR_COLS; col<span style="color: #333333">++</span>){
+		setColumnHigh(col);
+		<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> row<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; col<span style="color: #333333">&lt;</span>NR_ROWS; row<span style="color: #333333">++</span>){
+			state[row][col]<span style="color: #333333">=</span>readRow(row);
+		}
+	}
+}
+</pre></div>
+
+</p>
+
+					<p>I bought two <code>CONN FFC VERT 14POS 2.54MM PCB</code>s from DigiKey, who since seem to have discontinued them. These are <span class="tooltipd" title="Zero Insertion Force">ZIF</span> connectors for the FFCs on the keyboard to plug into. 2.54mm (0.1in) is the standard spacing for breadboards, and apparently also (or at least close enough to) the spacing of these FFC cables. The two connectors for the keyboard have 13 and 8 connected leads (the second has 15 connectors total, where the last 7 are connected to each other but not to the keyboard for some reason.) I stupidly bought 14-lead connectors, but I made it work by clipping off some of the extra plastic on one end of the 15-lead cable.</p>
+
+					<p>Now that I had them in front of me, I could hook them up to an Arduino Leonardo (selected for it's USB emulation capability) and make sure the connectors from the keyboard really <i>did</i> connect to the rows and columns of a matrix of switches. Yes, they do. However the 21 meaningful I/O lines required to read the keyboard's <span class="tooltipd" title="An astute reader will notice that this dosen't line up with the floor((n/2)^2) equation from earlier. You are right! It should be possible to read 64 keys with only 16 I/O lines, because floor((16/2)^2)==64, and this could be done by using the analog pins on the Arduino. However, for some reason the matrix is larger than this, and consequently has a bunch of holes in it, since only 64 positions are connected. However all the holes are not in the same columns, so we still need to scan the whole thing - and moreover, I had no way of knowing this without being able to read the whole matrix!">64 keys</span> were beyond the Arduino Leonardo's <span class="tooltipd" title="Not counting the possibility of using the analog I/O pins as digital input and using the I2C pins as I/O, but even that only brings it to 20">13 I/O lines</span> And that's not even thinking of other things I might want I/O for on the keyboard controller.</p>
+
+
+					<p><b>CC-BY-* credits</b><ul><li>New Window/Popup icon by Denis Klyuchnikov from the Noun Project</li><li>Buckling Spring diagram by <span class="tooltipd" title="User deleted, Wikimedia user page is a redlink - so removed here.">Shaddim</span> - <span class="int-own-work" lang="en">Own work</span>, <a href="https://creativecommons.org/licenses/by-sa/3.0" title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=30568410">Link</a></li></ul></p>
+				</div>
+			</div>
+			<div class="five pct tall"></div>
+		</div>
+	</body>
+</html>

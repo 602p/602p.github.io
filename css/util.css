@@ -6,18 +6,9 @@
 	margin:auto;
 }
 
-#main-block{
-	background-color: white;
-}
-
-@media screen{
-	#main-block{
-		box-shadow: 30px 30px 10px #333333;
-	}
-
-	body{
-		background-color: #7777ff;
-	}
+.tooltipd{
+	text-decoration:underline;
+	text-decoration-style:dashed;
 }
 
 .five.pct.tall{margin-top: 5%;}
