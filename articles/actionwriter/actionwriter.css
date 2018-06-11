@@ -23,13 +23,7 @@
 }
 
 #mux-img-container img{
-	/*display:block;*/
-	/*line-height: 0;*/
-	/*margin: 0;*/
-}
-
-#mux-img-container{
-	width: 80%;
+	width:100%;
 }
 
 #mux-input{
