@@ -23,11 +23,11 @@
 }
 
 #mux-img-container img{
-	width:100%;
+	/*width:100%;*/
 }
 
 #mux-input{
-	width: 75%;
+	width: 65%;
 }
 
 #mux-bindec, #mux-input{

@@ -121,6 +121,8 @@ $(function(){
         }else{
             content=parseInt(content, 10);
         }
+        if(content<0) content=0;
+        if(content>15) content=15;
         if(isNaN(content)) content=0;
         else $("#mux-input").val($("#mux-bindec").prop("checked")?content.toString(2):content);
         muxstate=content;
@@ -140,6 +142,7 @@ $(function(){
         updateinput();
     });
     $("#mux-input").keyup(updateinput);
+    $("#mux-input").change(updateinput);
 
     $(document).ready(function() {
         $('.popup').magnificPopup({type:'image'});
