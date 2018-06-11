@@ -5,6 +5,8 @@
 		<link rel="stylesheet" type="text/css" href="../../css/skeleton.css">
 		<link rel="stylesheet" type="text/css" href="../../css/util.css">
 		<link rel="stylesheet" href="../../css/magnific-popup.css">
+		<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+
 		<link rel="stylesheet" type="text/css" href="actionwriter.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script src="../../js/magnific-popup.min.js"></script>
@@ -74,6 +76,11 @@
 
 
 					<h5>Multiplexing our Matrix</h5>
+					<div id="mux-container">
+						<div id="mux-img-container"><img id="mux-animation" src="anim/1.png"></div>
+						<div><button id="mux-playpause">Pause</button>&nbsp;&nbsp;<button id="mux-step">Step</button></div>
+						<div><input type="number" id="mux-input" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Enter a number">&nbsp;<input type="checkbox" id="mux-bindec"><span id="mux-bindec-text">dec</span></div>
+					</div>
 
 					<p>There is a pretty elegant solution to this problem. I bought a couple 8:1 de/multiplexers on DigiKey (part nr. <a href="https://www.digikey.com/product-detail/en/texas-instruments/CD4051BE/296-2057-5-ND/67305" target="_blank" class="popout-icon-after"><code>CD4051BE</code></a>.) These guys allow you to control which of their eight output pins are electrically connected to their one input pin by driving it's address lines. A de/multiplexer with <code>n</code> address lines allows selection between <code>2^n</code> different lines, so for an mux with eight lines there are <code>log<sub>2</sub>(8) = 3</code> address lines. Because we actually only ever want to drive the selected column <span class="tooltipd" title="This is how I did it at first, the same principle applies if you want to drive it low, which is what I ended up doing.">high</span>, and there is no reason we would want to not select <i>any</i> column, we don't actually need to spend an I/O pin on the input to the mux, we can just connect it to +3v3.</p>
 

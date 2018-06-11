@@ -58,6 +58,11 @@ const string =
 $(function(){
     var state = 0;
     var running = 1;
+
+    var muxstate=0;
+    var muxrunning=1;
+    var muxbin=0;
+
     var advance = function(){
         $("#keyboard-matrix-animation").text(string[state]);
         state++;
@@ -80,6 +85,62 @@ $(function(){
         $("#keyboard-matrix-playpause").text("Play");
         advance();
     });
+
+
+    var muxadvance = function(){
+        $("#mux-animation").attr('src', "anim/"+muxstate+".png");
+        muxstate++;
+        if(muxstate==16) muxstate=0;
+    };
+    muxadvance();
+    setInterval(function(){
+        if(muxrunning) muxadvance();
+    }, 750);
+    $("#mux-playpause").click(function(){
+        muxrunning=!muxrunning;
+        if(muxrunning){
+            $("#mux-playpause").text("Pause");
+        }else{
+            $("#mux-playpause").text("Play");
+        }
+    });
+    $("#mux-step").click(function(){
+        muxrunning=0;
+        $("#mux-playpause").text("Play");
+        muxadvance();
+    });
+    var updateinput=function(){
+        var content = $("#mux-input").val();
+        if($("#mux-bindec").prop("checked")){
+            var badchars="23456789";
+            var i = badchars.length;
+            while (i--) {
+              content=content.replace(badchars.charAt(i), "");
+            }
+            content=parseInt(content, 2);
+        }else{
+            content=parseInt(content, 10);
+        }
+        if(isNaN(content)) content=0;
+        else $("#mux-input").val($("#mux-bindec").prop("checked")?content.toString(2):content);
+        muxstate=content;
+        muxrunning=false;
+        $("#mux-playpause").text("Play");
+        $("#mux-animation").attr('src', "anim/"+muxstate+".png");
+    };
+    $("#mux-bindec, #mux-bindec-text").click(function(){
+        muxbin=!muxbin;
+        if(muxbin){
+            $("#mux-bindec-text").text("bin");
+            $("#mux-bindec").prop("checked", true);
+        }else{
+            $("#mux-bindec-text").text("dec");
+            $("#mux-bindec").prop("checked", false);
+        }
+        updateinput();
+    });
+    $("#mux-input").keyup(updateinput);
+
     $(document).ready(function() {
         $('.popup').magnificPopup({type:'image'});
     });
