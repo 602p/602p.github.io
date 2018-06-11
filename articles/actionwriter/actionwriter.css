@@ -16,7 +16,7 @@
 	padding: 0.5%;
 }
 
-.popup:after {
+.popup:after, .popout-icon-after:after {
     content: "";
     display: inline-block;
     background: url("popout.svg") no-repeat;
