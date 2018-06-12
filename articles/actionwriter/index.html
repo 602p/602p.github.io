@@ -132,7 +132,7 @@
 
 <span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">loop</span>(){
 	Serial.print(<span style="background-color: #fff0f0">&quot;[&quot;</span>);
-	<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> col<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; col<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">16</span>; col<span style="color: #333333">++</span>){
+	<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> col<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; col<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">13</span>; col<span style="color: #333333">++</span>){
 		setColumnHigh(col);
 		<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> row<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; row<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">8</span>; row<span style="color: #333333">++</span>){
 			Serial.print(readRow(row));
@@ -159,7 +159,57 @@
 
 					<h5><del>Arduino Contraption</del> &rarr; Keyboard</h5>
 
-					<p></p>
+					<p>One quick optimization we're going to do is to make it so that we only care about the parts of the keyboard matrix that map to actual keys. The keyboard map above clearly indicates that holes make up something like 40% of the matrix. We will compute a bitmask representing which places in the matrix we care about, and we can have the Arduino only bother to read those spots.</p>
+
+					<div class="row">
+						<div class="eight columns">
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">from</span> <span style="color: #0e84b5; font-weight: bold">mapping</span> <span style="color: #008800; font-weight: bold">import</span> mapping <span style="color: #888888">#Map of (col, row) to key name</span>
+
+columns<span style="color: #333333">=</span>[[] <span style="color: #008800; font-weight: bold">for</span> _ <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">13</span>)]
+<span style="color: #008800; font-weight: bold">for</span> pos <span style="color: #000000; font-weight: bold">in</span> mapping<span style="color: #333333">.</span>keys():
+	columns[pos[<span style="color: #0000DD; font-weight: bold">0</span>]]<span style="color: #333333">.</span>append(pos[<span style="color: #0000DD; font-weight: bold">1</span>])
+
+masks<span style="color: #333333">=</span>[]
+<span style="color: #008800; font-weight: bold">for</span> col <span style="color: #000000; font-weight: bold">in</span> columns:
+	masks<span style="color: #333333">.</span>append([i <span style="color: #000000; font-weight: bold">in</span> col <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">8</span>)])
+
+bitmasks<span style="color: #333333">=</span>[]
+<span style="color: #008800; font-weight: bold">for</span> mask <span style="color: #000000; font-weight: bold">in</span> masks:
+	bits<span style="color: #333333">=</span><span style="color: #007020">reversed</span>(<span style="color: #007020">map</span>(<span style="color: #007020">str</span>, <span style="color: #007020">map</span>(<span style="color: #007020">int</span>, mask)))
+	<span style="color: #888888">#    ^switching endian</span>
+	bitmasks<span style="color: #333333">.</span>append(<span style="background-color: #fff0f0">&quot;0b&quot;</span><span style="color: #333333">+</span><span style="background-color: #fff0f0">&quot;&quot;</span><span style="color: #333333">.</span>join(bits))
+
+<span style="color: #007020">print</span>(bitmasks)
+</pre></div>
+
+
+						</div>
+						<div class="four columns">
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">//Into C syntax...</span>
+<span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">unsigned</span> <span style="color: #333399; font-weight: bold">char</span>
+MASK[<span style="color: #0000DD; font-weight: bold">13</span>] <span style="color: #333333">=</span> {
+	<span style="color: #0000DD; font-weight: bold">0b00000001</span>,
+	<span style="color: #0000DD; font-weight: bold">0b10001011</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01101111</span>,
+	<span style="color: #0000DD; font-weight: bold">0b00000001</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01111010</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01011010</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01011010</span>,
+	<span style="color: #0000DD; font-weight: bold">0b11111111</span>,
+	<span style="color: #0000DD; font-weight: bold">0b11111111</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01111110</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01011010</span>,
+	<span style="color: #0000DD; font-weight: bold">0b11111101</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01111011</span>
+};
+</pre></div>
+
+
+
+						</div>
+					</div><br/>
+
+					<p>You can see that the resultant masks represent the same information as the keymap image above, but it's now column-major instead of row-major (i.e. it's been rotated 90&deg; right.) This is because we will be scanning <span class="tooltipd" title="This is how we've been thinking of it. It also means that we only have to change three instead of four address bits">column-by-column</span>. The other thing we are going to need to do is keep track of the state of the keyboard. USB Keyboards send events to inform the computer in the changes of the states of keys, so we need to keep track of the previous state so that we can send these events on the rising and falling edges.</p>
 
 
 					<hr/>
