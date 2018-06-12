@@ -176,7 +176,7 @@ masks<span style="color: #333333">=</span>[]
 bitmasks<span style="color: #333333">=</span>[]
 <span style="color: #008800; font-weight: bold">for</span> mask <span style="color: #000000; font-weight: bold">in</span> masks:
 	bits<span style="color: #333333">=</span><span style="color: #007020">reversed</span>(<span style="color: #007020">map</span>(<span style="color: #007020">str</span>, <span style="color: #007020">map</span>(<span style="color: #007020">int</span>, mask)))
-	<span style="color: #888888">#    ^switching endian</span>
+	<span style="color: #888888">#    ^switching endian so that the 0th bit is the 0th row</span>
 	bitmasks<span style="color: #333333">.</span>append(<span style="background-color: #fff0f0">&quot;0b&quot;</span><span style="color: #333333">+</span><span style="background-color: #fff0f0">&quot;&quot;</span><span style="color: #333333">.</span>join(bits))
 
 <span style="color: #007020">print</span>(bitmasks)
@@ -185,7 +185,7 @@ bitmasks<span style="color: #333333">=</span>[]
 
 						</div>
 						<div class="four columns">
-<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">//Into C syntax...</span>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .8em .1em .1em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">//Into C syntax...</span>
 <span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">unsigned</span> <span style="color: #333399; font-weight: bold">char</span>
 MASK[<span style="color: #0000DD; font-weight: bold">13</span>] <span style="color: #333333">=</span> {
 	<span style="color: #0000DD; font-weight: bold">0b00000001</span>,
@@ -211,6 +211,119 @@ MASK[<span style="color: #0000DD; font-weight: bold">13</span>] <span style="col
 
 					<p>You can see that the resultant masks represent the same information as the keymap image above, but it's now column-major instead of row-major (i.e. it's been rotated 90&deg; right.) This is because we will be scanning <span class="tooltipd" title="This is how we've been thinking of it. It also means that we only have to change three instead of four address bits">column-by-column</span>. The other thing we are going to need to do is keep track of the state of the keyboard. USB Keyboards send events to inform the computer in the changes of the states of keys, so we need to keep track of the previous state so that we can send these events on the rising and falling edges.</p>
 
+					<p>Next, we'll generate the mapping from these linear indexes to the keycodes we want to send using the Aruduino Leonardo's Keyboard <span class="tooltipd" title="If it is a keyboard, is it emulation? 🤔">emulation</span>. For letters and numbers this will be as straightforward as just spitting out the character. For others (e.g. ctrl) we will need to use the #defines from the Arduino keyboard library.</p>
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">from</span> <span style="color: #0e84b5; font-weight: bold">mapping</span> <span style="color: #008800; font-weight: bold">import</span> mapping
+
+columns<span style="color: #333333">=</span>[[] <span style="color: #008800; font-weight: bold">for</span> _ <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">13</span>)]
+<span style="color: #008800; font-weight: bold">for</span> pos <span style="color: #000000; font-weight: bold">in</span> mapping<span style="color: #333333">.</span>keys():
+	columns[pos[<span style="color: #0000DD; font-weight: bold">0</span>]]<span style="color: #333333">.</span>append(pos[<span style="color: #0000DD; font-weight: bold">1</span>])
+
+keymap<span style="color: #333333">=</span>[]
+<span style="color: #008800; font-weight: bold">for</span> col, entries <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">enumerate</span>(columns):
+	<span style="color: #008800; font-weight: bold">for</span> row <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">sorted</span>(entries):
+		keymap<span style="color: #333333">.</span>append(mapping[(col, row)])
+
+<span style="color: #007020">print</span>(keymap)
+
+for_arduino<span style="color: #333333">=</span>[]
+<span style="color: #008800; font-weight: bold">for</span> item <span style="color: #000000; font-weight: bold">in</span> keymap:
+	<span style="color: #008800; font-weight: bold">if</span> <span style="color: #007020">len</span>(item)<span style="color: #333333">==</span><span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #000000; font-weight: bold">and</span> item <span style="color: #000000; font-weight: bold">in</span> <span style="background-color: #fff0f0">&quot;abcdefghijklmnopqrstuvwxyz&quot;</span>:
+		for_arduino<span style="color: #333333">.</span>append(<span style="background-color: #fff0f0">&quot;&#39;%s&#39;&quot;</span><span style="color: #333333">%</span>item)
+	<span style="color: #008800; font-weight: bold">else</span>:
+		for_arduino<span style="color: #333333">.</span>append({
+			<span style="background-color: #fff0f0">&quot;code&quot;</span>: 	<span style="background-color: #fff0f0">&quot;KEY_LEFT_GUI&quot;</span>,
+			<span style="background-color: #fff0f0">&quot;mar_rel&quot;</span>: 	<span style="background-color: #fff0f0">&quot;KEY_ESC&quot;</span>,
+			<span style="background-color: #fff0f0">&quot;r_mar&quot;</span>: 	<span style="background-color: #fff0f0">&quot;KEY_LEFT_ALT&quot;</span>,
+			<span style="color: #888888"># ...a bunch more omitted here...</span>
+			<span style="background-color: #fff0f0">&quot;topleft&quot;</span>:	<span style="background-color: #fff0f0">&quot;&#39;~&#39;&quot;</span>,
+			<span style="background-color: #fff0f0">&quot;semicolon&quot;</span>:	<span style="background-color: #fff0f0">&quot;&#39;;&#39;&quot;</span>
+		}[item])
+
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;, &quot;</span><span style="color: #333333">.</span>join(for_arduino))
+</pre></div><br/>
+
+					<p>Then we take the output of this and plug it into an updated version of the previous controller code. We've also updated the controller to scan all 64 keys into a buffer, and to keep two copies of this buffer. We then send keyboard events on the rising and falling edges of all of those keys. The <code>delay(10)</code> is a lazy form of debouncing. A better approach would be to have an array <code>int cycles_down[64]</code> and determine some number of cycles through <code>loop()</code> to require a key to be down before counting it. This, however, is simple and the <span class="tooltipd" title="The poor rollover characteristcs mean I'm probably not going to be gaming on this thing">latency isn't a big deal</span>. Putting it together, these are the interestingly changed parts of a minimal keyboard controller:</p>
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #557799">#include &lt;Keyboard.h&gt;</span>
+
+<span style="color: #888888">//...</span>
+
+<span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">unsigned</span> <span style="color: #333399; font-weight: bold">char</span> MASK[<span style="color: #0000DD; font-weight: bold">13</span>] <span style="color: #333333">=</span> {
+	<span style="color: #0000DD; font-weight: bold">0b00000001</span>,
+	<span style="color: #0000DD; font-weight: bold">0b10001011</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01101111</span>,
+	<span style="color: #0000DD; font-weight: bold">0b00000001</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01111010</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01011010</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01011010</span>,
+	<span style="color: #0000DD; font-weight: bold">0b11111111</span>,
+	<span style="color: #0000DD; font-weight: bold">0b11111111</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01111110</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01011010</span>,
+	<span style="color: #0000DD; font-weight: bold">0b11111101</span>,
+	<span style="color: #0000DD; font-weight: bold">0b01111011</span>
+};
+
+<span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">unsigned</span> <span style="color: #333399; font-weight: bold">char</span> MAP[<span style="color: #0000DD; font-weight: bold">64</span>] <span style="color: #333333">=</span> {KEY_LEFT_GUI, <span style="color: #0044DD">&#39; &#39;</span>, <span style="color: #0044DD">&#39;?&#39;</span>, <span style="color: #0044DD">&#39;?&#39;</span>, <span style="color: #0044DD">&#39;?&#39;</span>, <span style="color: #0044DD">&#39;?&#39;</span>,
+	KEY_LEFT_CTRL, KEY_LEFT_ALT, <span style="color: #0044DD">&#39;\t&#39;</span>, KEY_ESC, <span style="color: #0044DD">&#39;?&#39;</span>, KEY_LEFT_SHIFT, <span style="color: #0044DD">&#39;z&#39;</span>, <span style="color: #0044DD">&#39;q&#39;</span>,
+	<span style="color: #0044DD">&#39;1&#39;</span>, <span style="color: #0044DD">&#39;~&#39;</span>, <span style="color: #0044DD">&#39;a&#39;</span>, <span style="color: #0044DD">&#39;x&#39;</span>, <span style="color: #0044DD">&#39;w&#39;</span>, <span style="color: #0044DD">&#39;2&#39;</span>, <span style="color: #0044DD">&#39;s&#39;</span>, <span style="color: #0044DD">&#39;c&#39;</span>, <span style="color: #0044DD">&#39;e&#39;</span>, <span style="color: #0044DD">&#39;3&#39;</span>, <span style="color: #0044DD">&#39;d&#39;</span>, <span style="color: #0044DD">&#39;b&#39;</span>, <span style="color: #0044DD">&#39;v&#39;</span>, <span style="color: #0044DD">&#39;t&#39;</span>, <span style="color: #0044DD">&#39;r&#39;</span>,
+	<span style="color: #0044DD">&#39;4&#39;</span>, <span style="color: #0044DD">&#39;5&#39;</span>, <span style="color: #0044DD">&#39;f&#39;</span>, <span style="color: #0044DD">&#39;g&#39;</span>, <span style="color: #0044DD">&#39;n&#39;</span>, <span style="color: #0044DD">&#39;m&#39;</span>, <span style="color: #0044DD">&#39;y&#39;</span>, <span style="color: #0044DD">&#39;u&#39;</span>, <span style="color: #0044DD">&#39;7&#39;</span>, <span style="color: #0044DD">&#39;6&#39;</span>, <span style="color: #0044DD">&#39;j&#39;</span>, <span style="color: #0044DD">&#39;h&#39;</span>, <span style="color: #0044DD">&#39;,&#39;</span>, <span style="color: #0044DD">&#39;]&#39;</span>, <span style="color: #0044DD">&#39;i&#39;</span>,
+	<span style="color: #0044DD">&#39;8&#39;</span>, <span style="color: #0044DD">&#39;+&#39;</span>, <span style="color: #0044DD">&#39;k&#39;</span>, <span style="color: #0044DD">&#39;.&#39;</span>, <span style="color: #0044DD">&#39;o&#39;</span>, <span style="color: #0044DD">&#39;9&#39;</span>, <span style="color: #0044DD">&#39;l&#39;</span>, <span style="color: #0044DD">&#39;/&#39;</span>, <span style="color: #0044DD">&#39;[&#39;</span>, <span style="color: #0044DD">&#39;p&#39;</span>, <span style="color: #0044DD">&#39;0&#39;</span>, <span style="color: #0044DD">&#39;-&#39;</span>, <span style="color: #0044DD">&#39;;&#39;</span>, <span style="color: #0044DD">&#39;\&#39;&#39;</span>, <span style="color: #0044DD">&#39;?&#39;</span>,
+	KEY_RETURN, <span style="color: #0044DD">&#39;?&#39;</span>, <span style="color: #0044DD">&#39;?&#39;</span>, KEY_BACKSPACE, <span style="color: #0044DD">&#39;?&#39;</span>};
+
+<span style="color: #333399; font-weight: bold">bool</span> state[<span style="color: #0000DD; font-weight: bold">64</span>];
+<span style="color: #333399; font-weight: bold">bool</span> old_state[<span style="color: #0000DD; font-weight: bold">64</span>];
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">setup</span>(){
+	<span style="color: #888888">//...</span>
+
+	Keyboard.begin();
+
+	memset(old_state, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #008800; font-weight: bold">sizeof</span> state);
+}
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">loop</span>(){
+	memset(state, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #008800; font-weight: bold">sizeof</span> state);
+	<span style="color: #888888">//Since we only write into the buffer sometimes, keep a count</span>
+	<span style="color: #333399; font-weight: bold">int</span> state_pos <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+
+	<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> col<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; col<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">13</span>; col<span style="color: #333333">++</span>){
+		setColumnHigh(col);
+		<span style="color: #888888">//Have to do this because we have to scan all columns</span>
+		<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> row<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; row<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">8</span>; row<span style="color: #333333">++</span>){
+			<span style="color: #008800; font-weight: bold">if</span>(bitRead(MASK[col], row)){
+				state[state_pos] <span style="color: #333333">=</span> readRow(row);
+				state_pos<span style="color: #333333">++</span>;
+			}
+		}
+	}
+	
+	<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> i<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; i<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">64</span>; i<span style="color: #333333">++</span>){
+		<span style="color: #888888">//For each key, send a press on the rising edge</span>
+		<span style="color: #888888">// and a release on the falling edge</span>
+		<span style="color: #008800; font-weight: bold">if</span>(state[i] <span style="color: #333333">&amp;&amp;</span> <span style="color: #333333">!</span>old_state[i]){
+			Keyboard.press(MAP[i]);
+		}<span style="color: #008800; font-weight: bold">else</span> <span style="color: #008800; font-weight: bold">if</span>(<span style="color: #333333">!</span>state[i] <span style="color: #333333">&amp;&amp;</span> old_state[i]){
+			Keyboard.release(MAP[i]);
+		}
+	}
+
+	<span style="color: #888888">//Switch buffers</span>
+	memcpy(old_state, state, <span style="color: #008800; font-weight: bold">sizeof</span> state);
+	delay(<span style="color: #0000DD; font-weight: bold">10</span>);
+}
+</pre></div><br/>
+
+					<p>This is a really minimal version. You may notice a rather large number of <code>'?'</code>s in the key mapping. These are keys like Paper Up and Margin Return that I've temporarily bound to question mark. Normally you'd want to bind them to stuff like PgUp or Insert. I haven't done this here to avoid burying the lede, but it is set up in that manner in the code I actually run on mine. The shifting is also handled entirely by the OS in this version (we are sending the scancodes and the system keymap determines what they really appear as.) There's a <b>lot</b> of fun stuff you could add to your keyboard controller, now that you've built it youself. Some things I've implemented for fun include: <span class="tooltipd" title="You can have the Leonardo appear as both a keyboard and a serial port, so I use this to have software running as a daemon on the computer send status information down to the Arduino to report stuff like network connectivity">software-controllable</span> status LEDs, <span class="tooltipd" title="This is actually kinda cheating - this uses the same serial port trick and emits the keypresses from a script on the computer. I haven't figured out a good way to type unicode yet.">ｆｕｌｌｗｉｄｔｈ ｔｅｘｔ</span> mode, hardware rot13 and more!</p>
+
+					<p>#TODO: example(s) for other modes, shifting</p>
+
+					<hr/>
+
+					<div><img id="cat" src="cat.jpeg" align="right" valign="middle"><div align="right" valign="middle">I'm Louis. Contact me at <a href="mailto:louis@goessling.com">louis@goessling.com</a> or find me on github at <a href="https://github.com/602p">602p</a>.
+					<br/>I go to the U of MN. I'm the Sysadmin for the <a href="acm.umn.edu">ACM</a> there.
+					<br/>There are a handful of other things on this <a href="/">website</a>.</div></div>
 
 					<hr/>
 					<p><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This article, "<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Actionwriter Conversion</span>" (including those original images and assets not named below) by <a xmlns:cc="http://creativecommons.org/ns#" href="https://louis.goessling.com/articles/actionwriter" property="cc:attributionName" rel="cc:attributionURL">Louis Goessling</a> is licensed under a <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
