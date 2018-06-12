@@ -149,6 +149,6 @@ $(function(){
     });
 
     $(".tooltipd").click(function(){
-        alert($(this).attr("title"));
+        alert("Tooltip text:\n\n"+$(this).attr("title"));
     })
 });
