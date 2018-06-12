@@ -6,6 +6,11 @@
 	margin:auto;
 }
 
+.u-image-centered{
+	margin:auto;
+	display:block;
+}
+
 .tooltipd{
 	text-decoration: underline dashed;
 }

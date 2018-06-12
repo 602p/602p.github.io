@@ -72,7 +72,7 @@
 
 					<p>I bought two <code>CONN FFC VERT 14POS 2.54MM PCB</code>s from DigiKey, who since seem to have discontinued them. These are <span class="tooltipd" title="Zero Insertion Force, which is sorta kinda true. Really it means that the hole for the connector is too big, you put it in (requiring no insertion force) and then move a lever (or something) and the hole becomes slightly smaller than the right size, clamping it in place.">ZIF</span> connectors for the FFCs on the keyboard to plug into. 2.54mm (0.1in) is the standard spacing for breadboards, and apparently also (or at least close enough to) the spacing of these FFC cables. The two connectors for the keyboard have 13 and 8 connected leads (the second has 15 connectors total, where the last 7 are connected to each other but not to the keyboard for some reason.) I stupidly bought 14-lead connectors, but I made it work by clipping off some of the extra plastic on the end of the 15-lead one that is all wired together.</p>
 
-					<p>Now that I had them in front of me, I could hook them up to an Arduino Leonardo (selected for it's USB emulation capability) and make sure the connectors from the keyboard really <i>did</i> connect to the rows and columns of a matrix of switches. Yes, they do. However the 21 meaningful I/O lines required to read the keyboard's <span class="tooltipd" title="You might have noticed that this dosen't line up with the &lfloor;(n/2)^2&rfloor; equation from earlier. You are right! It should be possible to read 64 keys with only 16 I/O lines, because &lfloor;(16/2)^2&rfloor;==64, and this could be done by using the analog pins on the Arduino. However, for some reason the matrix is larger than this, and consequently has a bunch of holes in it, since only 64 positions are connected  - and moreover, I had no way of knowing this without being able to read the whole matrix!">64 keys</span> were beyond the Arduino Leonardo's <span class="tooltipd" title="Not counting the possibility of using the analog I/O pins as digital input and using the I2C pins as I/O, but even that only brings it to 20">13 I/O lines</span> And that's not even thinking of other things I might want I/O for on the keyboard controller.</p>
+					<p>Now that I had them in front of me, I could hook them up to an Arduino Leonardo (selected for it's USB emulation capability) and make sure the connectors from the keyboard really <i>did</i> connect to the rows and columns of a matrix of switches. Yes, they do. However the 21 meaningful I/O lines required to read the keyboard's <span class="tooltipd" title="You might have noticed that this dosen't line up with the &lfloor;(n/2)^2&rfloor; equation from earlier. You are right! It should be possible to read 64 keys with only 16 I/O lines, because &lfloor;(16/2)^2&rfloor;==64, and this could be done by using the analog pins on the Arduino. However, the matrix is larger than this, and consequently has a bunch of holes in it since only 64 positions are connected. Unfortunately, every column has at least one key in it so we still need to scan them all.">64 keys</span> were beyond the Arduino Leonardo's <span class="tooltipd" title="Not counting the possibility of using the analog I/O pins as digital input and using the I2C pins as I/O, but even that only brings it to 20">13 I/O lines</span> And that's not even thinking of other things I might want I/O for on the keyboard controller.</p>
 
 
 					<h5>Multiplexing our Matrix</h5>
@@ -101,13 +101,72 @@
 					(Reading one of the eight rows through the mux is the same, but we only write <code>log<sub>2</sub>(8) = 3</code> address bits, and do a read from the :1 side after.)
 					</p>
 
-					<h5>Reconstructing the map</h5>
+					<h5>Putting the map back together</h5>
 
-					<p><a href="map.png" class="popup">It looks like this</a></p>
+					<p>There are a couple things about the real system that are different from what I've been describing. If you've been reading the <span class="tooltipd" title="Hi!">tooltip text</span> you'll have seen some of them. The two important things are:
+						<ol>
+							<li>The keyboard only has 64 keys, but there are 104 places in the 13x8 keyboard matrix. Why? I'm not sure, but I have a hunch. The IBM Wheelwriter 5 shares the same keyboard layout as the Actionwriter 1, with the addition of five more keys on the left hand side (you can see that on page 12 of <a href="http://publications.lexmark.com/publications/pdfs/2007/typewriters/Wheelwriter-5.pdf" class="popout-icon-after" target="_blank">this pdf</a>.) I suspect it shares the same membrane and metal backplane as the Actionwriter, since if you <span class="tooltipd" title="I actually own two of these, and boltmodded (replacing the plastic rivets with bolts, as on a early Model M) the other because it's plastic frontpeice was cracked and the hammers fell out of their spots. Such is the eBay experience.">take apart the keyboard</span> from this typewriter there's another row of five contact pads without hammers/stems immediately to the left of the leftmost column of keys. On this subject, there's also a pad and stem immediately to the right of the brackets keys (under the top third of the return key, where backslash would normally be.) If I find aesthetically matching keys I may mod this keyboard to have a backslash and normal-sized enter. Regardless, the question still stands as to why not use a 9x8 matrix.
+							<br/><br/>The important part is that there are "holes" in the matrix where no <span class="tooltipd" title="These will go high if you hit a bad enough rollover state. This keyboard dosen't have diodes or anything inside it to prevent rollover, it can only handle 3 or 4 keys down at the same time before going a little nuts :(.">physical key</span> will cause it to read connected. Unfortunately each of the 13 columns has at least one key in it, so we have to at least scan across them all. The real keyboard controller program avoids reading the state of the holes, though.</li>
+							<li>If you've worked with this kinda DIY electronics before you'll have hit issues with bounce and noise left and right. One thing I did in this project that was <b>really</b> effective at helping the bounce/noise issues was to make it so "driving" a column meant grounding it. Then I enabled the built-in pull-up resistor on the pin I read from on the Arduino so that if it's not connected it will read high. It's then inverted in software. This really helps - I don't know enough about electronics to know <i>why</i> though :P</li>
+						</ol>
+					</p>
+
+					<p>At this point there wasn't anything left to do besides put it together in hardware! The minimum necessary to be able to read the whole keyboard matrix is 3 8:1 muxes and the transistor to switch between them. You could probably go without the mux on the rows and the switching transistor if you wanted. The <a class="popup" href="ceilrootn.gif">controller as it exists on my desk</a> is only a little more complex than what I've described, because it has some hardware (shift registers) to run status LEDs.</p>
+
+					<p>Once it's wired up the next step was to figure out the mapping of <code>(row, col)</code> matrix positions to keys. For this I wrote a small script for the Arduino that just dumped the entire state of the keyboard matrix over serial. This isn't how real keyboards work, and it sends a bunch of extra info (the holes in the matrix.)</p>
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">int</span> COL_ADDRESS_PINS[<span style="color: #0000DD; font-weight: bold">4</span>] <span style="color: #333333">=</span> {<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #0000DD; font-weight: bold">4</span>, <span style="color: #0000DD; font-weight: bold">5</span>};
+<span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">int</span> ROW_ADDRESS_PINS[<span style="color: #0000DD; font-weight: bold">3</span>] <span style="color: #333333">=</span> {<span style="color: #0000DD; font-weight: bold">6</span>, <span style="color: #0000DD; font-weight: bold">7</span>, <span style="color: #0000DD; font-weight: bold">8</span>};
+<span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">int</span> ROW_READ_PIN        <span style="color: #333333">=</span> A0;
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">setup</span>(){
+	<span style="color: #888888">//Configure the pins. Switch circuit is closed when it&#39;s low, so set the</span>
+	<span style="color: #888888">// input pin to be high by default</span>
+	pinMode(ROW_READ_PIN, INPUT_PULLUP);
+	<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> i<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; i<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">4</span>; i<span style="color: #333333">++</span>) pinMode(COL_ADDRESS_PINS[i], OUTPUT);
+	<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> i<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; i<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">3</span>; i<span style="color: #333333">++</span>) pinMode(ROW_ADDRESS_PINS[i], OUTPUT);
+
+	Serial.begin(<span style="color: #0000DD; font-weight: bold">115200</span>);
+	<span style="color: #008800; font-weight: bold">while</span> (<span style="color: #333333">!</span>Serial); <span style="color: #888888">//Initialize serial port and wait for connection</span>
+}
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">loop</span>(){
+	Serial.print(<span style="background-color: #fff0f0">&quot;[&quot;</span>);
+	<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> col<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; col<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">16</span>; col<span style="color: #333333">++</span>){
+		setColumnHigh(col);
+		<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> row<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; row<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">8</span>; row<span style="color: #333333">++</span>){
+			Serial.print(readRow(row));
+		}
+	}
+	Serial.println(<span style="background-color: #fff0f0">&quot;]&quot;</span>);
+}
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">setColumnHigh</span>(<span style="color: #333399; font-weight: bold">int</span> address){
+	<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> i<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; i<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">4</span>; i<span style="color: #333333">++</span>)
+		digitalWrite(COL_ADDRESS_PINS[i], bitRead(address, i));
+}
+
+<span style="color: #333399; font-weight: bold">bool</span> <span style="color: #0066BB; font-weight: bold">readRow</span>(<span style="color: #333399; font-weight: bold">int</span> address){
+	<span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> i<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; i<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">3</span>; i<span style="color: #333333">++</span>)
+		digitalWrite(ROW_ADDRESS_PINS[i], bitRead(address, i));
+
+	<span style="color: #008800; font-weight: bold">return</span> <span style="color: #333333">!</span>digitalRead(ROW_READ_PIN);
+}
+</pre></div>
+					<br/>
+					<p>There's a Python script in the repo for this project that displays the keyboard matrix as you type in real time. I used this to figure out the locations of keys in the matrix. The darker gray squares are the holes discussed earlier. <code>(12, 2)</code> is where backslash would be if there was a key to <span class="tooltipd" title="If you pop off the return key you can poke it with a pencil, since there isn't a alignment column in the stem there either (there is one in the stem right of the quote key.)">actuate it</span>. It looks like this:</p>
+					<img src="map.png" class="u-image-centered"><br/>
+
+					<h5><del>Arduino Contraption</del> &rarr; Keyboard</h5>
+
+					<p></p>
+
 
 					<hr/>
-					<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This article, "<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Actionwriter Conversion</span>" (including those original images and assets not named below) by <a xmlns:cc="http://creativecommons.org/ns#" href="https://louis.goessling.com/articles/actionwriter" property="cc:attributionName" rel="cc:attributionURL">Louis Goessling</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
-					<p><b>CC-BY-* credits</b><ul><li>New Window/Popup icon <span class="popout-icon-after">(</span>) by Denis Klyuchnikov from the Noun Project</li><li>Buckling Spring diagram by <span class="tooltipd" title="User deleted, Wikimedia user page is a redlink - so removed here.">Shaddim</span> - <span class="int-own-work" lang="en">Own work</span>, <a href="https://creativecommons.org/licenses/by-sa/3.0" title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=30568410">Link</a></li></ul></p>
+					<p><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This article, "<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Actionwriter Conversion</span>" (including those original images and assets not named below) by <a xmlns:cc="http://creativecommons.org/ns#" href="https://louis.goessling.com/articles/actionwriter" property="cc:attributionName" rel="cc:attributionURL">Louis Goessling</a> is licensed under a <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+					<p><b>CC-BY-* credits</b><ul><li>New Window/Popup icon <span class="popout-icon-after">(</span>) by Denis Klyuchnikov from the Noun Project</li><li>Buckling Spring diagram by <span class="tooltipd" title="User deleted, Wikimedia user page is a redlink - so removed here.">Shaddim</span> - <span class="int-own-work" lang="en">Own work</span>, <a href="https://creativecommons.org/licenses/by-sa/3.0" title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=30568410">Link</a></li>
+					<li>The buckling spring audio clip is public domain from Wikipedia</li>
+					</ul></p>
 				</div>
 			</div>
 			<div class="five pct tall"></div>
