@@ -155,7 +155,7 @@
 }
 </pre></div>
 					<br/>
-					<p>There's a Python script in the repo for this project that displays the keyboard matrix as you type in real time. I used this to figure out the locations of keys in the matrix. The darker gray squares are the holes discussed earlier. <code>(12, 2)</code> is where backslash would be if there was a key to <span class="tooltipd" title="If you pop off the return key you can poke it with a pencil, since there isn't a alignment column in the stem there either (there is one in the stem right of the quote key.)">actuate it</span>. It looks like this:</p>
+					<p>There's a Python script in the repo for this project that displays the keyboard matrix as you type in real time. I used this to figure out the locations of keys in the matrix. This process was as simple as pulling up this tool and pressing keys, while writing the resulting <code>(column, row)</code> coordinates down in a <a href="https://github.com/602p/actionwriter/blob/master/live_tools/map.txt" class="popout-icon-after" target="_blank">text file</a>. This then gets parsed into a python data structure that is a dictionary associating <code>(column, row)</code> indices in the matrix with (arbitrary) pretty key names. The darker gray squares are the holes discussed earlier. <code>(12, 2)</code> is where backslash would be if there was a key to <span class="tooltipd" title="If you pop off the return key you can poke it with a pencil, since there isn't a alignment column in the stem there either (there is one in the stem right of the quote key.)">actuate it</span>. It looks like this:</p>
 					<img src="map.png" class="u-image-centered"><br/>
 
 					<h5><del>Arduino Contraption</del> &rarr; Keyboard</h5>
@@ -212,7 +212,7 @@ MASK[<span style="color: #0000DD; font-weight: bold">13</span>] <span style="col
 
 					<p>You can see that the resultant masks represent the same information as the keymap image above, but it's now column-major instead of row-major (i.e. it's been rotated 90&deg; right.) This is because we will be scanning <span class="tooltipd" title="This is how we've been thinking of it. It also means that we only have to change three instead of four address bits">column-by-column</span>. The other thing we are going to need to do is keep track of the state of the keyboard. USB Keyboards send events to inform the computer in the changes of the states of keys, so we need to keep track of the previous state so that we can send these events on the rising and falling edges.</p>
 
-					<p>Next, we'll generate the mapping from these linear indexes to the keycodes we want to send using the Aruduino Leonardo's Keyboard <span class="tooltipd" title="If it is a keyboard, is it emulation? 🤔">emulation</span>. For letters and numbers this will be as straightforward as just spitting out the character. For others (e.g. ctrl) we will need to use the #defines from the Arduino keyboard library.</p>
+					<p>Next, we'll generate the mapping from these linear indexes to the keycodes we want to send using the Aruduino Leonardo's Keyboard <span class="tooltipd" title="If it is a keyboard, is it emulation?">emulation</span>. For letters and numbers this will be as straightforward as just spitting out the character. For others (e.g. ctrl) we will need to use the #defines from the Arduino keyboard library.</p>
 
 <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">from</span> <span style="color: #0e84b5; font-weight: bold">mapping</span> <span style="color: #008800; font-weight: bold">import</span> mapping
 
@@ -317,9 +317,17 @@ for_arduino<span style="color: #333333">=</span>[]
 }
 </pre></div><br/>
 
-					<p>This is a really minimal version. You'll see a couple <code><span style="color: #0000DD; font-weight: bold">0</span></code>s in there for keys that I haven't yet bound to anything. It also simply has no way to type a bunch of stuff: backslash, delete, arrow keys or <span class="tooltipd" title="You could, of course, bind the `lock` key to caps lock but I much prefer to use it for ctrl and then use `code` for the GUI/Windows key. Since there is only one left modifier this is a lot more ergonomic than keeping caps lock and mapping GUI/Windows somewhere on the left column">caps lock</span>.</p>
+					<p>This is a really minimal version. You'll see a couple <code><span style="color: #0000DD; font-weight: bold">0</span></code>s in there for keys that I haven't yet bound to anything: physically these are the LMar, TSet and TClr keys. It also simply has no way to type a bunch of stuff: backslash, F-keys, arrow keys or <span class="tooltipd" title="You could, of course, bind the `lock` key to caps lock but I much prefer to use it for ctrl and then use `code` for the GUI/Windows key. Since there is only one left modifier this is a lot more ergonomic than keeping caps lock and mapping GUI/Windows somewhere on the left column">caps lock</span>. Of course, this mapping is essentially arbitrary. If you buy one of these guys you can configure the keyboard to have whatever layout you'd like. The biggest issue is that the keyboard for the Actionwriter 1 simply has less keys than a normal computer keyboard. So, how to deal with this? Shifting!</p>
 
-					<p>#TODO: example(s) for other modes, shifting</p>
+					<h5>Keyboard customization for fun and profit</h5>
+
+					<p>You may have wondered at this point: Does the shift key work on this keyboard? The answer is yes! When you press Shift, it is reported to the computer as any other key, and the actual shifting is done inside your OS. In fact, the whole idea that we are assigning characters to keys is a little disingenuous - we're actually assigning scancodes to keys. The Arduino Keyboard library just makes it so that we can use characters and their constants to refer to the scancodes by their names/values on a US-layout keyboard. That means that if you flash your arduino with the code above and plug it into a system with a Workman layout the keycap with D printed on it <i class="tooltipd" title="This is what you _should_ want...">will</i> type an H.</p>
+
+					<p>The kind of shifting I have in mind to solve the too-few-keys problem is different. It's more like the "shifting" done by the Fn key on a laptop or compact keyboard. When you press the Fn key, it's not reported to the OS. It instead causes the microcontroller in the keyboard to emit different scancodes to the computer when you press the Fn key in concert with different physical keys. In this way, (some of) the physical keys on the keyboard end up with multiple scancodes: one normal, and one when "shifted" with the Fn key. This is what we are going to do on the Actionwriter keyboard, to allow you to use a hardware meta key to input keypresses for keys that the keyboard does not physically have.</p>
+
+					<p>The easy approach is to simply factor out the logic of going linear-matrix-code &rarr; key into it's own function, then make decisions on how to overload that based on what keys are held down at the moment. We will do this, and then later look at a more complex but more elegant approach. The first thing we want to do on this front is to make it easier to identify the keys in the software running on the Arduino. This will allow us to use meaningful names instead of arbitrary numbers in our shifting logic. </p>
+
+					<i>(Extending the previous Python snippet...)</i>
 
 					<div class="row">
 						<div class="eight columns">
@@ -335,6 +343,11 @@ for_arduino<span style="color: #333333">=</span>[]
 </pre></div>
 						</div>
 					</div>
+					<br/>
+
+					<p>There's a lot more lines like this, but they aren't very interesting. They represent the mapping between the names we gave the keys and the arbitrary linear numbering we ended up with after removing holes. These are <code>#define</code> because we're only going to use a handful of them.</p>
+
+					<p></p>
 
 					<hr/>
 
