@@ -5,7 +5,7 @@
 		<link rel="stylesheet" type="text/css" href="../../css/skeleton.css">
 		<link rel="stylesheet" type="text/css" href="../../css/util.css">
 		<link rel="stylesheet" href="../../css/magnific-popup.css">
-		<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400" rel="stylesheet">
 
 		<link rel="stylesheet" type="text/css" href="actionwriter.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -35,6 +35,8 @@
 					</div>
 
 					<p>The venerable Actionwriter is a electromechanical typewriter, meaning it has a keyboard that is connected to a microcontroller that in turn drives the mechanical equipment doing the type-writing. Most importantly, being a genuine 1985 West Germany-made IBM product it had a buckling spring keyboard. If you aren't up to date on <span class="tooltipd" title="This is the part of the keyboard that turns the motion of the peice of plastic with the letter printed on it into an electronically-readable signal">keyswitch</span> types, the buckling-spring is something of a holy grail (IMO, at least.) They have a great kinetic feel and are gloriously clicky. Unfortunately, Model Ms are <span class="tooltipd" title="I know, $100 isn't that expensive - but hey, I'm a student, and you remember the cheapskate comment">kinda</span> expensive because no matter how you cut it you have to have one of these complicated little assemblies for each key. </p>
+
+					<p>To make the most of this article, you should know a little about programming and a little more about electronics. The majority of the code involved is just shuffling around data, so you should be able to get by as long as you can read C and Python. As far as the hardware, if you've used an Arduino before your probably good - I went into this having never meaningfully used <span class="tooltipd" title="Integrated Circuits. In this case two or three types of Dual-Inline Packages, or DIPs.">IC</span>s.</p>
 
 
 					<h5>How does this thing connect, anyway?</h5>
@@ -317,11 +319,11 @@ for_arduino<span style="color: #333333">=</span>[]
 }
 </pre></div><br/>
 
-					<p>This is a really minimal version. You'll see a couple <code><span style="color: #0000DD; font-weight: bold">0</span></code>s in there for keys that I haven't yet bound to anything: physically these are the LMar, TSet and TClr keys. It also simply has no way to type a bunch of stuff: backslash, F-keys, arrow keys or <span class="tooltipd" title="You could, of course, bind the `lock` key to caps lock but I much prefer to use it for ctrl and then use `code` for the GUI/Windows key. Since there is only one left modifier this is a lot more ergonomic than keeping caps lock and mapping GUI/Windows somewhere on the left column">caps lock</span>. Of course, this mapping is essentially arbitrary. If you buy one of these guys you can configure the keyboard to have whatever layout you'd like. The biggest issue is that the keyboard for the Actionwriter 1 simply has less keys than a normal computer keyboard. So, how to deal with this? Shifting!</p>
+					<p>This is a really minimal version. You'll see a couple <code><span style="color: #0000DD; font-weight: bold">0</span></code>s in there for keys that I haven't yet bound to anything: physically these are the LMar, TSet and TClr keys. It also simply has no way to type a bunch of stuff: backslash, F-keys, arrow keys or <span class="tooltipd" title="You could, of course, bind the `lock` key to caps lock but I much prefer to use it for ctrl and then use `code` for the GUI/Windows key. Since there is only one left modifier this is a lot more ergonomic (imo) than keeping caps lock and mapping GUI/Windows somewhere on the left column">caps lock</span>. Of course, this mapping is essentially arbitrary. If you buy one of these guys you can configure the keyboard to have whatever layout you'd like. The biggest issue is that the keyboard for the Actionwriter 1 simply has less keys than a normal computer keyboard. <br/>So: how to deal with this? Shifting!</p>
 
 					<h5>Keyboard customization for fun and profit</h5>
 
-					<p>You may have wondered at this point: Does the shift key work on this keyboard? The answer is yes! When you press Shift, it is reported to the computer as any other key, and the actual shifting is done inside your OS. In fact, the whole idea that we are assigning characters to keys is a little disingenuous - we're actually assigning scancodes to keys. The Arduino Keyboard library just makes it so that we can use characters and their constants to refer to the scancodes by their names/values on a US-layout keyboard. That means that if you flash your arduino with the code above and plug it into a system with a Workman layout the keycap with D printed on it <i class="tooltipd" title="This is what you _should_ want...">will</i> type an H.</p>
+					<p>You may have wondered at this point: Does the shift key work on this keyboard? The answer is yes! When you press Shift, it is reported to the computer as any other key, and the actual shifting is done inside your OS. In fact, the whole idea that we are assigning characters to keys is a little disingenuous - we're actually assigning scancodes to keys. The Arduino Keyboard library just makes it so that we can use characters and their constants to refer to the scancodes by what they map top on a US-Layout keyboard. That means that if you flash your Arduino with the code above and plug it into a system with a Workman layout the keycap with D printed on it <span class="tooltipd" title="You should want this...">will</span> type an H.</p>
 
 					<p>The kind of shifting I have in mind to solve the too-few-keys problem is different. It's more like the "shifting" done by the Fn key on a laptop or compact keyboard. When you press the Fn key, it's not reported to the OS. It instead causes the microcontroller in the keyboard to emit different scancodes to the computer when you press the Fn key in concert with different physical keys. In this way, (some of) the physical keys on the keyboard end up with multiple scancodes: one normal, and one when "shifted" with the Fn key. This is what we are going to do on the Actionwriter keyboard, to allow you to use a hardware meta key to input keypresses for keys that the keyboard does not physically have.</p>
 
@@ -345,14 +347,14 @@ for_arduino<span style="color: #333333">=</span>[]
 					</div>
 					<br/>
 
-					<p>There's a lot more lines like this, but they aren't very interesting. They represent the mapping between the names we gave the keys and the arbitrary linear numbering we ended up with after removing holes. These are <code>#define</code> because we're only going to use a handful of them.</p>
+					<p>There are, of course, a lot more lines in the output than what I have on the right. I've just cut them off because they aren't very interesting. This represents the mapping from meaningful names to our arbitrary linear IDs. This allows us to write more complex code on the Arduino without magic numbers.</p>
 
 					<p></p>
 
 					<hr/>
 
 					<div><img id="cat" src="cat.jpeg" align="right" valign="middle"><div align="right" valign="middle">I'm Louis. Contact me at <a href="mailto:louis@goessling.com" target="_blank" class="popout-icon-after">louis@goessling.com</a> or find me on GitHub at <a href="https://github.com/602p" target="_blank" class="popout-icon-after">602p</a>.
-					<br/>I go to the U of MN. I'm the Sysadmin for the <a href="acm.umn.edu" target="_blank" class="popout-icon-after">ACM</a> chapter there.
+					<br/>I go to the U of MN. I'm the Sysadmin for the <a href="https://2acm.umn.edu" target="_blank" class="popout-icon-after">ACM</a> chapter there.
 					<br/>There are a handful of other things on this <a href="/">website</a>.</div></div>
 
 					<hr/>
