@@ -1,3 +1,40 @@
+.u-text-centered{
+	text-align: center;
+}
+
+.u-block-centered{
+	margin:auto;
+}
+
+.u-image-centered{
+	margin:auto;
+	display:block;
+}
+
+.tooltipd{
+	text-decoration: underline dashed;
+}
+
+.five.pct.tall{margin-top: 5%;}
+.ten.pct.tall{margin-top: 10%;}
+.fifteen.pct.tall{margin-top: 15%;}
+
+hr{
+  border-top: 3px groove #A1A1A1;
+}
+
+*{
+	font-size: 14.5pt;
+}
+
+#headshot {
+	display:block;
+	-webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    vertical-align: middle;
+}
+
 #main-block{
 	background-color: white;
 }

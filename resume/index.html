@@ -1,14 +1,13 @@
 <html>
 	<head>
 		<title>Louis Goessling</title>
-		<link rel="stylesheet" type="text/css" href="../css/normalize.css">
-		<link rel="stylesheet" type="text/css" href="../css/skeleton.css">
-		<link rel="stylesheet" type="text/css" href="../css/util.css">
+		<link rel="stylesheet" type="text/css" href="normalize.css">
+		<link rel="stylesheet" type="text/css" href="skeleton.css">
 		<link rel="stylesheet" type="text/css" href="resume.css">
 		<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-		<link rel="stylesheet" href="../css/magnific-popup.css">
+		<link rel="stylesheet" href="magnific-popup.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script src="../js/magnific-popup.min.js"></script>
+		<script src="magnific-popup.min.js"></script>
 		<script type="text/javascript">
 		$(document).ready(function() {
 			$('.popup').magnificPopup({type:'image'});
@@ -22,11 +21,16 @@
 				<div class="row">
 					<div class="ten columns offset-by-one column">
 						<div class="row">
-							<div class="u-full-width u-text-centered">
+							<div class="two columns">
+								<div class="five pct tall"></div><br/>
+								<img id="headshot" src="img/headshot.jpeg">
+							</div>
+							<div class="eight columns u-text-centered">
 								<div class="five pct tall"></div>
 								<h1>Louis Goessling</h1>
-								Big Nerd
+								<em><h4>Big Nerd</h4></em>
 							</div>
+							<div class="two columns"></div>
 						</div>
 						<div class="row">
 							<div class="u-full-width u-text-centered">
@@ -36,8 +40,9 @@
 						<div class="row">
 							<div class="u-full-width">
 								<h4 class="u-full-width u-text-centered">Who?</h4>
-								<p>I'm a 17-year-old student at the University of Minnesota (Twin Cities) through  <span class="tooltipd" title="Postsecondary Education Option is a Minnesota program allowing students who have completed the available high school coursework to coenroll in college classes">PSEO</span>. My high-school-of-record is Washburn High, where I would be a rising Senior, but I am enrolled full-time at the U of M. I love to work with technology and computers, and am very interested in computer science topics. I've been doing FIRST FRC Robotics for seven years and have been involved in a number of software projects in my free time. I am also a Boy Scout and play Ultimate Frisbee. In my free time I like to ride my bike, do compsci stuff, and do metal(working|casting) in my backyard.</p>
-								<p>Even though I'm a young guy, I have been doing computer-science and programming stuff for a long time, and am pretty advanced. I'm familiar with technologies like web dev and server hosting, interpreter and programming language internals, compilers and machine architecture, and even low-level OS development. I'm technically fluent, and capable of using many common software packages on Linux and Windows, and am familiar with computer and electrical hardware.</p>
+								<p>I'm a 17-year-old student at the University of Minnesota (Twin Cities) through  <span class="tooltipd" title="Postsecondary Education Option is a Minnesota program allowing students who have completed the available high school coursework to coenroll in college classes">PSEO</span>. My high-school-of-record is Washburn High, where I would be a Senior, but I am enrolled full-time at the U of M. I love to work with technology and computers, and am very interested in computer science topics. </p>
+								<p>I'm very involved at the Association for Computing Machinery student chapter at the UMTC, where I am the Systems Administrator. I've been doing FIRST FRC Robotics for seven years and have been involved in a number of software projects in my free time. I am also a Boy Scout and play Ultimate Frisbee. In my free time I like to ride my bike, do compsci stuff, and do metal{working,casting} in my backyard.</p>
+								<p>Even though I'm a young guy, I have been doing computer-science and programming stuff for a long time, and am pretty advanced. I'm familiar with technologies like web dev and server hosting, interpreter and programming language internals, compilers and machine architecture, and even low-level OS development. I'm technically fluent, and capable of using many common software packages on Linux and Windows, and am familiar with electronics and computer hardware.</p>
 								<hr/>
 							</div>
 						</div>
@@ -72,7 +77,7 @@
 												<li>Built a variable-width bit-coding huffman tree <a target="_blank" href="https://github.com/602p/yeezip">compression codec</a> in C that utilisies an embedded Python interpreter to run a tree-optimization genetic algorithm. Can beat out GZip and Windows Zip by up to 10% in some nontrivial edge cases</li>
 												<li>Designed a object-oriented systems programming language called <a target="_blank" href="https://github.com/602p/orth">Orth</a> and built a <b>compiler</b> for it in Python utilizing the LLVM backend to generate executable machine code that runs on Windows and Linux and is capable of interfacing with C. Created a <b>self-hosting compiler</b> (Orth compiler written in Orth) for the language.</li>
 												<li>Used Orth to build a simple <b>Operating System</b> from scratch using only x86 assembly and Orth. It has <a href="img/emu2.png" class="popup">VESA framebuffer support</a>, keyboard input, <span class="tooltipd" title="It's a single-tasking protected-mode system, a-la DOS. It has keyboard I/O, handles the system timer and has OO interfaces to paging/GDTs/interrupts through Orth implementations. It boots over the Multiboot2 protocol and can load data as MB2 modules. It supports VGA text-mode and has a text-mode emulator for use under VESA mode. It runs in emulators and on real hardware.">support for a number of x86 features</span>, and is capable of running simple programs like snake, a BMP renderer and a <a href="img/raycast.png" class="popup">rudimentary 3D raycaster</a>.</li>
-												<li>Built an USB keyboard compatibility layer between the keyboard for an IBM ActionWriter 1 electric typewriter and a modern PC. This involved reverse-engineering it's undocumented interface and building a hardware adapter out of an Arduino Leonardo and off-the-shelf ICs.</li>
+												<li>Built a USB keyboard compatibility layer between the keyboard for an IBM ActionWriter 1 electric typewriter and a modern PC. This involved reverse-engineering it's undocumented interface and building a hardware adapter out of an Arduino Leonardo and off-the-shelf ICs.</li>
 											</ul>
 										</li>
 									</ul>
@@ -119,7 +124,10 @@
 						<div class="row">
 							<div class="u-full-width">
 								<h4 class="u-text-centered">How?</h4>
-								<p>Contact me via email at <b><a target="_blank" href="mailto:louis@goessling.com">louis@goessling.com</a></b> (or <a target="_blank" href="mailto:goess006@umn.edu">goess006@umn.edu</a>.) Find me on GitHub at <a target="_blank" href="https://github.com/602p">602p</a>.</p>
+								<p>Contact me via email at <b><a target="_blank" href="mailto:louis@goessling.com">louis@goessling.com</a></b> (or <a target="_blank" href="mailto:goess006@umn.edu">goess006@umn.edu</a>.)
+								<br/>My <a href="/key.asc">GPG key</a> fingerprint is <code>D351 334F 0334 9C3B 8D99 4780 6156 C7B5 BA78 9EA7</code>.</p>
+								<p>Find me on <a target="_blank" href="https://github.com/602p">GitHub</a> and <a target="_blank" href="https://keybase.io/602p">Keybase</a> at 602p.
+									<br/>Connect with me on <a target="_blank" href="https://www.linkedin.com/in/louis-goessling-350686135/">LinkedIn</a>.</p>
 							</div>
 						</div>
 						<div class="row five pct tall"></div>
