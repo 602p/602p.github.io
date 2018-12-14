@@ -27,6 +27,10 @@ hr{
 	font-size: 14.5pt;
 }
 
+.sec-header {
+	font-weight: bold;
+}
+
 #headshot {
 	display:block;
 	-webkit-border-radius: 10px;
