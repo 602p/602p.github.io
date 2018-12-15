@@ -38,14 +38,7 @@ hr{
 	text-align: right;
 }
 
-.date-box {
-	width: 6.5em;
-}
 
-.accolade-box {
-	width: 4em;
-	text-align: right;
-}
 
 .white-popup {
   position: relative;
@@ -65,14 +58,6 @@ hr{
 	padding: 20px;
 }
 
-#headshot {
-	display:block;
-	-webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    vertical-align: middle;
-}
-
 .ebgaramond {
 	font-family: "EB Garamond", Serif;
 }
@@ -85,26 +70,59 @@ hr{
 	background-color: white;
 }
 
-@media screen{
-	#main-block{
-		box-shadow: 30px 30px 10px #333333;
+
+@media (min-width: 1100px){
+	.mobile-only{display: none;}
+	.headshot {
+		display:block;
+		-webkit-border-radius: 10px;
+	    -moz-border-radius: 10px;
+	    border-radius: 10px;
+	    vertical-align: middle;
 	}
 
+	.date-box {
+		width: 6.5em;
+	}
+
+	.accolade-box {
+		width: 4em;
+		text-align: right;
+	}
+}
+
+@media (max-width: 1100px){
+	.desktop-only{display: none;}
+	.headshot{
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		-webkit-border-radius: 10px;
+	    -moz-border-radius: 10px;
+	    border-radius: 10px;
+	    vertical-align: middle;
+	}
+}
+
+@media screen {
 	body{
 		background-color: #5555ff;
 	}
 }
 
-
-@media (min-width: 1100px){
-	.mobile-only{display: none;}
+@media screen and (min-width: 1100px) {
+	#main-block{
+		box-shadow: 30px 30px 10px #333333;
+	}
 }
 
-@media (max-width: 1100px){
-	.desktop-only{display: none;}
-	#headshot{
-		display: block;
-		margin-left: auto;
-		margin-right: auto;
+.mono {
+	font-family: monospace;
+	background-color: #cccccc;
+}
+
+@media print{
+	.headshot-container{
+		display: none;
 	}
 }
