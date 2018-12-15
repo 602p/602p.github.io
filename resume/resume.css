@@ -24,11 +24,45 @@ hr{
 }
 
 *{
-	font-size: 14.5pt;
+	font-size: 15pt;
+	font-family: "Source Serif Pro", Serif;
+	font-weight: 400;
 }
 
 .sec-header {
 	font-weight: bold;
+	font-family: "Aleo", Serif;
+}
+
+.u-right-text {
+	text-align: right;
+}
+
+.date-box {
+	width: 6.5em;
+}
+
+.accolade-box {
+	width: 4em;
+	text-align: right;
+}
+
+.white-popup {
+  position: relative;
+  background: #FFF;
+  padding: 20px;
+  /*width: auto;*/
+  max-width: 700px;
+  margin: 20px auto;
+}
+
+.outlined {
+	border-width: 2px;
+	border-style: solid;
+}
+
+.popup-inner {
+	padding: 20px;
 }
 
 #headshot {
@@ -37,6 +71,14 @@ hr{
     -moz-border-radius: 10px;
     border-radius: 10px;
     vertical-align: middle;
+}
+
+.ebgaramond {
+	font-family: "EB Garamond", Serif;
+}
+
+.bold {
+	font-weight: bold;
 }
 
 #main-block{
@@ -49,6 +91,6 @@ hr{
 	}
 
 	body{
-		background-color: #7777ff;
+		background-color: #5555ff;
 	}
 }

@@ -4,13 +4,19 @@
 		<link rel="stylesheet" type="text/css" href="normalize.css">
 		<link rel="stylesheet" type="text/css" href="skeleton.css">
 		<link rel="stylesheet" type="text/css" href="resume.css">
-		<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:200,400" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=EB+Garamond:400,600" rel="stylesheet">
 		<link rel="stylesheet" href="magnific-popup.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script src="magnific-popup.min.js"></script>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 		<script type="text/javascript">
 		$(document).ready(function() {
 			$('.popup').magnificPopup({type:'image'});
+			$('.text-popup').magnificPopup({type:'inline',midClick:true});
+			$(".tooltipd").click(function(){
+		        alert($(this).attr("title"));
+		    })
 		});
 		</script>
 	</head>
@@ -26,8 +32,8 @@
 								<img id="headshot" src="img/headshot.jpeg">
 							</div>
 							<div class="eight columns u-text-centered">
-								<div class="five pct tall"></div>
-								<h1>Louis Goessling</h1>
+								<div class="ten pct tall"></div>
+								<h1 class="ebgaramond bold">Louis Goessling</h1>
 								<em><h4>Big Nerd</h4></em>
 							</div>
 							<div class="two columns"></div>
@@ -40,44 +46,261 @@
 						<div class="row">
 							<div class="u-full-width">
 								<h4 class="sec-header u-full-width u-text-centered">Who?</h4>
-								<p>I'm a 17-year-old student at the University of Minnesota (Twin Cities) through  <span class="tooltipd" title="Postsecondary Education Option is a Minnesota program allowing students who have completed the available high school coursework to coenroll in college classes">PSEO</span>. My high-school-of-record is Washburn High, where I would be a Senior, but I am enrolled full-time at the U of M. I love to work with technology and computers, and am very interested in computer science topics. </p>
-								<p>I'm very involved at the Association for Computing Machinery student chapter at the UMTC, where I am the Systems Administrator. I've been doing FIRST FRC Robotics for seven years and have been involved in a number of software projects in my free time. I am also a Boy Scout and play Ultimate Frisbee. In my free time I like to ride my bike, do compsci stuff, and do metal{working,casting} in my backyard.</p>
-								<p>Even though I'm a young guy, I have been doing computer-science and programming stuff for a long time, and am pretty advanced. I'm familiar with technologies like web dev and server hosting, interpreter and programming language internals, compilers and machine architecture, and even low-level OS development. I'm technically fluent, and capable of using many common software packages on Linux and Windows, and am familiar with electronics and computer hardware.</p>
+								<p>I'm a 17-year-old student at the University of Minnesota - Twin Cities (UMTC) through  <span class="tooltipd" title="Postsecondary Education Option is a Minnesota program allowing students who have completed the available high school coursework to coenroll in college classes">PSEO</span>. My high-school-of-record is Washburn High where I am officially a Senior, but I am enrolled full-time at UMTC. I am passionate about technology and Computer Science, especially systems and languages topics. </p>
+								<p>I am the Systems Administrator at the Association for Computing Machinery <a href="https://acm.umn.edu">student chapter</a> at UMTC. I've done FIRST FRC Robotics for seven years. I'm a Boy Scout, Ultimate Frisbee player, cyclist, and metalcasting hobbyist.</p>
+								<p>I'm familiar web dev and server hosting, interpreter and programming language internals, networking and protocols, compilers and machine architecture, and even low-level OS development. I'm technically fluent, capable of using many common software packages on Linux and Windows. I know my way around electronics and computer hardware.</p>
 								<hr/>
 							</div>
 						</div>
+
+						
+						<div class="row">
+							<div class="u-full-width">
+								<h4 class="sec-header u-text-centered">Where?</h4>
+								<div class="row">
+									<div class="eight columns">
+										<b>University of Minnesota - Twin Cities</b>
+										<br/>PSEO Student (College of Continuing Education)
+										<br/>Admitted to College of Science and Engineering for undergrad
+									</div>
+									<div class="four columns u-right-text">
+										<i>Fall 2017 - Present</i>
+										<br/>Cumulative GPA: 3.876
+										<br/><a href="#umtc-coursework-box" class="text-popup">Selected Coursework</a>
+									</div>
+								</div>
+
+								<br/>
+
+								<div class="row">
+									<div class="eight columns">
+										<b>Minnesota Community and Technical College</b>
+										<br/>PSEO Student (limited by law to one course)
+									</div>
+									<div class="four columns u-right-text">
+										<i>Fall 2016 - Spring 2017</i>
+										<br/>Cumulative GPA: 4.000
+									</div>
+								</div>
+
+								<br/>
+
+								<div class="row">
+									<div class="eight columns">
+										<b>Washburn Senior High School</b>
+										<br/>Not currently enrolled in any classes
+									</div>
+									<div class="four columns u-right-text">
+										<i>Fall 2014 - Present</i>
+										<br/>Cumulative GPA: 3.863
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row"><hr/></div>
+						<div class="row">
+							<div class="u-full-width">
+								<h4 class="sec-header u-text-centered">When?</h4>
+								<table>
+									<tr><td></td><td class="u-text-centered"><i class="fas fa-desktop"></i> Computing &nbsp;&nbsp;&nbsp; <i class="far fa-compass"></i> Leadership &nbsp;&nbsp;&nbsp; <i class="fas fa-running"></i> Athletics &nbsp;&nbsp;&nbsp; <i class="fas fa-award"></i> Accolade &nbsp;&nbsp;&nbsp; <i class="fas fa-graduation-cap"></i> Academic</td><td></td></tr>
+
+									<tr>
+										<td class="date-box">Ongoing</td>
+										<td>Elected Systems Administrator for the Association for Computing Machinery student chapter at UMTC</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-desktop" title="Computing"></i>&nbsp;<i class="far fa-compass" title="Leadership"></i>&nbsp;
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Summer 2018</td>
+										<td>Awarded NSA Scholarship to attend Cybersecurity Engineering program at Embry-Riddle Aerospace University</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-desktop" title="Computing"></i>&nbsp;<i class="fas fa-award" title="Accolade"></i>&nbsp;
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Spring 2018,<br/>Fall 2017</td>
+										<td>Earned University of Minnesota CCE Deans List (2x)</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-graduation-cap" title="Academic"></i>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Fall 2016 -<br/>Fall 2017</td>
+										<td>Elected Assistant Senior Patrol Leader for Boy Scout Troop 187.</td>
+										<td>
+											<div class="accolade-box">
+												<i class="far fa-compass" title="Leadership"></i>&nbsp;
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Fall 2017</td>
+										<td>Organized CodeDay Minneapolis, including sponsorship and day-of management</td>
+										<td>
+											<div class="accolade-box">
+												<i class="far fa-compass" title="Leadership">&nbsp;</i>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Spring 2017</td>
+										<td>Awarded AP Scholar with Distinction</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-graduation-cap" title="Academic"></i>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Spring 2017</td>
+										<td>Won Best Game and MVP at CodeDay Spring 2017 as part of a team that built a networked space dogfighting game</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-desktop" title="Computing"></i>&nbsp;<i class="fas fa-award" title="Accolade"></i>&nbsp;
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Spring 2017</td>
+										<td>Won first place in the Spring 2017 <span class="tooltipd" title="a nationwide Cybersecurity capture-the-flag contest">CodeCup</span> as part of Minneapolis team</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-desktop" title="Computing"></i>&nbsp;<i class="fas fa-award" title="Accolade"></i>&nbsp;
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Winter 2016</td>
+										<td>Won Best Game at CodeDay Winter 2016 as part of a team that built a cooperative multiplayer tetris game using custom UDP networking</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-desktop" title="Computing"></i>&nbsp;<i class="fas fa-award" title="Accolade"></i>&nbsp;
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Summer 2016</td>
+										<td>Attended Boy Scouts National Youth Leadership Training at Greywolf</td>
+										<td>
+											<div class="accolade-box">
+												<i class="far fa-compass" title="Leadership"></i>&nbsp;
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Spring 2016</td>
+										<td>Placed #10 at the North Star Regional on FRC team 2129 as Software lead</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-desktop" title="Computing"></i>&nbsp;<i class="fas fa-award" title="Accolade"></i>&nbsp;
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Spring 2016</td>
+										<td>Deans List Semifinalist at North Star Regional</td>
+										<td>
+											<div class="accolade-box">
+												<i class="far fa-compass" title="Leadership"></i>&nbsp;<i class="fas fa-award" title="Accolade"></i>&nbsp;
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Spring 2016</td>
+										<td>Won State Division IV in Ultimate Frisbee on Washburn Wolfpack</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-running" title="Athletics"></i>&nbsp;
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Spring 2015</td>
+										<td>Awarded AP Scholar with Honor</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-graduation-cap" title="Academic"></i>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Winter 2015</td>
+										<td>Won Best Overall at CodeDay Winter 2015 as part of a team that built a yelp clone for trick-or-treating</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-desktop" title="Computing"></i>&nbsp;<i class="fas fa-award" title="Accolade"></i>&nbsp;
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Winter 2013</td>
+										<td>Selected as <a href="https://us.pycon.org/2013/schedule/presentation/211/" target="_blank">poster presenter</a> at PyCon 2013 for serpint (below)</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-desktop" title="Computing"></i>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="date-box">Winter 2011</td>
+										<td>Won second place in the 13-and-under category of the 2011 Raspberry Pi international summer code contest for a hardware control toolkit called serpint</td>
+										<td>
+											<div class="accolade-box">
+												<i class="fas fa-desktop" title="Computing"></i>&nbsp;<i class="fas fa-award" title="Accolade"></i>&nbsp;
+											</div>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+
+						<div class="row"><hr/></div>
+
 						<div class="row">
 							<h4 class="sec-header u-full-width u-text-centered">What?</h4>
 							<div class="row">
 								<div class="six columns">
 									<h5 class="u-text-centered">Programming</h5>
 									<ul>
-										<li>I'm familiar with <b>Python</b>, <b>Java</b>, <b>OCaml</b>, <b>C</b>, <b>C#</b>, and <b>HTML</b>/<b>JS</b>/<b>CSS</b></li>
-										<li>I've used <b>Flask</b>, <b>Postgres</b> and <b>SQLAlchemy</b>, <b>OAuth</b>, <b>Heroku</b>, <b>Linux</b>, <b>LLVM</b> and <b>clang</b> (and <b>GCC</b>).</li>
-										<li>I've got a good grasp of CSci principles, and can apply skills across languages</li>
+										<li>Expert-level understanding of <b>Python</b> and <b>C</b></li>
+										<li>Comfortable with <b>Linux</b> and <b>Systems Administration</b></li>
+										<li>Familiar with <b>Java</b>, <b>OCaml</b>, <b>C#</b>, and <b>HTML</b>/<b>JS</b>/<b>CSS</b></li>
+										<li>Experience with <b>Flask</b>, <b>Postgres</b> and <b>SQLAlchemy</b>; <b>LLVM</b>, <b>clang</b> and <b>GCC</b></li>
+										<li>Strong grasp of programming principles that I can apply across languages</li>
 										<li>
-											I've won some cool awards:
+											Interesting projects:
+											<div class="outlined"><ul>
+												<li>Designed an object-oriented systems programming language called <a target="_blank" href="https://github.com/602p/orth">Orth</a> and built a <b>compiler</b> for it in Python utilizing the LLVM backend. It generates executables that run on Windows, Linux, and Android. Created a <b>self-hosting compiler</b> (Orth compiler written in Orth) for the language</li>
+												<li>Used Orth to build a simple <b>Operating System</b> from scratch using only x86 assembly and Orth. It has <a href="img/emu2.png" class="popup">VESA framebuffer support</a>, keyboard input, <span class="tooltipd" title="It's a single-tasking protected-mode system, a-la DOS. It has keyboard I/O, handles the system timer and has OO interfaces to paging/GDTs/interrupts through Orth implementations. It boots over the Multiboot2 protocol and can load data as MB2 modules. It supports VGA text-mode and has a text-mode emulator for use under VESA mode. It runs in emulators and on real hardware.">support for a number of x86 features</span>, and is capable of running simple programs like snake and a <a href="img/raycast.png" class="popup">rudimentary 3D raycaster</a> on real hardware</li>
+											</ul></div>
 											<ul>
-												<li>Won <a target="_blank" href="https://www.raspberrypi.org/blog/summer-coding-contest-results-finally/">second place</a> in the 13-and-under category of the 2011 Raspberry Pi international summer code contest for a virtual serial port interface to <b>hardware IO</b> on the device called serpint</li>
-												<li><a target="_blank" href="https://us.pycon.org/2013/schedule/presentation/211/">Presented</a> serpint (above) at Pycon 2013</li>
-												<li>Won Best Overall at CodeDay Winter 2015 as part of a team that built a yelp clone for trick-or-treating</li>
-												<li>Won Best Game at CodeDay Winter 2016 as part of a team that built a <a target="_blank" href="https://github.com/turnipjs/Multiplayer-Tetris">cooperative multiplayer tetris game</a> using custom UDP <b>networking</b></li>
-												<li>Won Best Game and MVP at CodeDay Spring 2017 as part of a team that built a networked space dogfighting game</li>
-												<li>Helped Minneapolis win #1 in the Spring 2017 <a href="https://cup.codeday.org/" target="_blank">CodeCup</a> - a nationwide Cybersecurity capture-the-flag contest - beating out the Bay Area and tying for first with Seattle in the 2016-17 season</li>
-												<li>Won an NSA Scholarship to attend a Cybersecurity Engineering program at Embry-Riddle Aerospace University over the Summer of 2018</li>
-											</ul>
-										</li>
-										<li>
-											I've also worked on all sorts of other projects:
-											<ul>
-												<li>Helped launch <a target="_blank" href="https://omgtransit.com/">OMGTransit</a> at a Minneapolis Hackathon</li>
-												<li>Helped the open-collaboration project <a target="_blank" href="https://openhatch.org/">OpenHatch</a> <a target="_blank" href="http://lists.openhatch.org/pipermail/devel/2014-August/003718.html">migrate</a> their issue tracker</li>
-												<li>Organized CodeDay fall 2017 at Clockwork as acting regional manager. This included setting up sponsorships and administrating day-of</li>
-												<li><span class="tooltipd" title="I wrote Entropy, and then maintained both for about a year, now maintained by linuxgurugamer. He has merged them together and is still updating it as of today">Maintained</span> <a target="_blank" href="http://forum.kerbalspaceprogram.com/index.php?/topic/151803-121-dang-it-continued/">DangIt and Entropy</a> for a time, two mods (free expansions) for the popular video game Kerbal Space Program, which together have tens of thousands of downloads</li>
-												<li>Built a variable-width bit-coding huffman tree <a target="_blank" href="https://github.com/602p/yeezip">compression codec</a> in C that utilisies an embedded Python interpreter to run a tree-optimization genetic algorithm. Can beat out GZip and Windows Zip by up to 10% in some nontrivial edge cases</li>
-												<li>Designed a object-oriented systems programming language called <a target="_blank" href="https://github.com/602p/orth">Orth</a> and built a <b>compiler</b> for it in Python utilizing the LLVM backend to generate executable machine code that runs on Windows and Linux and is capable of interfacing with C. Created a <b>self-hosting compiler</b> (Orth compiler written in Orth) for the language.</li>
-												<li>Used Orth to build a simple <b>Operating System</b> from scratch using only x86 assembly and Orth. It has <a href="img/emu2.png" class="popup">VESA framebuffer support</a>, keyboard input, <span class="tooltipd" title="It's a single-tasking protected-mode system, a-la DOS. It has keyboard I/O, handles the system timer and has OO interfaces to paging/GDTs/interrupts through Orth implementations. It boots over the Multiboot2 protocol and can load data as MB2 modules. It supports VGA text-mode and has a text-mode emulator for use under VESA mode. It runs in emulators and on real hardware.">support for a number of x86 features</span>, and is capable of running simple programs like snake, a BMP renderer and a <a href="img/raycast.png" class="popup">rudimentary 3D raycaster</a>.</li>
-												<li>Built a USB keyboard compatibility layer between the keyboard for an IBM ActionWriter 1 electric typewriter and a modern PC. This involved reverse-engineering it's undocumented interface and building a hardware adapter out of an Arduino Leonardo and off-the-shelf ICs.</li>
+												<li>Contributed to launch <a target="_blank" href="https://omgtransit.com/">OMGTransit</a> at a Minneapolis Hackathon</li>
+												<li><span class="tooltipd" title="I wrote Entropy, and then maintained both for about a year, now maintained by linuxgurugamer. He has merged them together and is still updating it as of today">Maintained</span> <a target="_blank" href="http://forum.kerbalspaceprogram.com/index.php?/topic/151803-121-dang-it-continued/">DangIt and Entropy</a> for a time, two <span class="tooltipd" title="Free software expansions">mods</span> for the popular video game Kerbal Space Program, which together have tens of thousands of downloads</li>
+												<li>Built a variable-width bit-coding huffman tree <a target="_blank" href="https://github.com/602p/yeezip">compression codec</a> in C that utilizes an embedded Python interpreter to run a tree-optimization genetic algorithm. Can beat out GZip and Windows Zip by up to 10% in some nontrivial edge cases</li>
+												<li>Built a <a href="/articles/actionwriter/">USB keyboard compatibility layer</a> between the keyboard for an IBM ActionWriter 1 electric typewriter and a modern PC. This involved reverse-engineering it's undocumented hardware interface and building a hardware adapter out of an <span class="tooltipd" title="A commercial microcontroller running a dialect of C++ with USB human interface device emulation capabilities.">Arduino Leonardo</span> and off-the-shelf chips</li>
 											</ul>
 										</li>
 									</ul>
@@ -86,38 +309,33 @@
 									<h5 class="u-text-centered">Not Programming</h5>
 									<ul>
 										<li>
-											I've been involved in <b>FRC Robotics</b> for seven years, since I was in middle school.
+											Competed in <b>FRC Robotics</b> for seven years - since I was in middle school.
 											<ul>
 												<li>Team <b>3699</b> (Spring Lake Park Panthinators), <b>2129</b> (Sourthwest Ultraviolet) and <b>2549</b> (Washburn Millerbots)</li>
-												<li>Served as Lead Programmer for those teams over seven years. Converted them to Java from LabVIEW</li>
-												<li>Competed in <i>Logomotion</i>, <i>Rebound Rumble</i>, <i>Ultimate Ascent</i>, <i>Aerial Assist</i>, <i>Recycle Rush</i>, <i>FIRST Stronghold</i>, <i>FIRST Steamworks</i> and <i>FIRST Power-Up</i></li>
-												<li>I'm a North Star Regional Deans List Semifinalist (2016-17 season)</li>
-												<li>Team Ultraviolet captained the number 8 alliance in eliminations and finished #10 overall at the North Star Regional in 2017</li>
+												<li>Lead Programmer for those teams over seven years. Converted them from LabVIEW to Java</li>
 											</ul>
 										</li>
 										<li>
-											I've been involved in the open and affirming <b>Boy Scout</b> Troop 187 for 7 years
+											Member of the open and affirming <b>Boy Scout</b> Troop 187 for 7 years
 											<ul>
-												<li>Currently a Life Scout, member of the Order of the Arrow and served as the troop's Assistant Senior Patrol leader</li>
+												<li>Life Scout, member of the <span class="tooltipd" title="The Scouting Honor Society">Order of the Arrow</span>, served as the troop's Assistant Senior Patrol leader</li>
 												<li>I have completed National Youth Leadership Training at Grey Wolf, and hold Red Cross certification for CPR and Wilderness First-Aid</li>
-												<li>I have completed my <b>Eagle Scout</b> Service Project and expect to recieve the rank by April 2019</li>
 											</ul>
+											<div class="outlined"><ul>
+												<li>Completed my <b>Eagle Scout</b> Service Project and expect to receive the rank by April 2019</li>
+											</ul></div>
 										</li>
 										<li>
 											I've taken an unusual track through <b>school</b>:
 											<ul>
-												<li>I went to an alternative program - The Lighthouse at Spring Lake Park high - for middle school, where I got an early start on AP classes</li>
-												<li>I've taken the AP Biology, AP Human Geography, AP US History, AP English Lit&amp;Comp and AP Physics, receiving 3, 5, 3, 3, 4 on their AP tests, <span class="tooltipd" title="All of these tests and classes except for AP Lit&Comp were taken in middle school.">respectively</span>. I received the AP Scholar with Honor Award.</li>
-												<li>I've taken advanced classes at Washburn, including <span class="tooltipd" title="I took these classes Freshman and Sophomore year of my high school career. I was prohibited (at the IBO level) from taking the IB tests for them because I was too young. I left Washburn for the U of MN before I could complete the Math or Physics tracks. IB SL Physics was the highest offered at washburn.">IB HL History years 1-2, IB HL Math year 1, IB SL Physics year 1</span></li>
-												<li>I took a Graduate-level Computer Programming class (ITEC 2903 - Software Development Projects) at the <b>Minneapolis Community and Technical College</b> my <span class="tooltipd" title="The U of MN does not admit Sophomores for PSEO. PSEO Statute restricts Sophomores to one class, and restricts them to Career or Tech-Ed classes - therefore I took an ITEC class instead of a CSCI class.">Sophomore year</span> of high school</li>
-												<li>I'm taking 2000- and 5000-level Computer Science classes at the <b>U of MN</b>, as well as math and history classes there</li>
-												<li>Official Washburn GPA of 3.863<br/>Official U of MN GPA of 3.867<br/>Official MCTC GPA of 4.000</li>
-												<li>I have been admitted to the <b>College of Science and Engineering</b> at the U of MN</li>
+												<li>Attended an alternative program - The Lighthouse at Spring Lake Park high - for middle school, where I got an early start on AP classes</li>
+												<li>Took advanced classes at Washburn, including AP and IB courses</li>
+												<li>Took a <span class="tooltipd" title="ITEC 2903 - Software Development Projects">Graduate-level Computer Programming class</span> at the <b>Minneapolis Community and Technical College</b> my <span class="tooltipd" title="The U of MN does not admit Sophomores for PSEO. PSEO Statute restricts Sophomores to one class, and restricts them to Career or Tech-Ed classes - therefore I took an ITEC class instead of a CSCI class.">Sophomore year</span> of high school</li>
+												<li>Enrolled full-time at the <b>University of Minnesota</b> for the last two years and am taking 5000-level CS classes there</li>
 											</ul>
 										</li>
-										<li><a target="_blank" href="http://www.minnesotaultimate.org/e/2016-mn-ultimate-state-high-school-championship">Won our division at state</a> in <b>Ultimate Frisbee</b> as part of the Washburn Wolfpack in the spring 2016 season</li>
-										<li>I've done some work with high-altitude ballooning through the AEM program at the U of MN. As part of a ballooning class I worked on a scientific payload that was launched to 100,000' to measure radiation characteristics</li>
-										<li>Bought 300lbs of coal and built a aluminum-casting and blacksmithing forge in my backyard and used this to create cast-aluminum art and robot parts</li>
+										<li>Worked with high-altitude ballooning through the <span class="tooltipd" title="Aerospace Engineering and Mechanics">AEM</span> program at UMTC. As part of a ballooning class I worked on a scientific payload that was launched to 100,000' to measure radiation in the upper atmosphere.</li>
+										<li>Bought 300lbs of coal and built a aluminum-casting and blacksmithing forge in my backyard, used this to create cast-aluminum art and robot parts</li>
 									</ul>
 								</div>
 							</div>
@@ -126,9 +344,9 @@
 						<div class="row">
 							<div class="u-full-width">
 								<h4 class="sec-header u-text-centered">How?</h4>
-								<p>Contact me via email at <b><a target="_blank" href="mailto:louis@goessling.com">louis@goessling.com</a></b> (or <a target="_blank" href="mailto:goess006@umn.edu">goess006@umn.edu</a>.)
-								<br/>My <a href="/key.asc">GPG key</a> fingerprint is <code>D351 334F 0334 9C3B 8D99 4780 6156 C7B5 BA78 9EA7</code>.</p>
-								<p>Find me on <a target="_blank" href="https://github.com/602p">GitHub</a> and <a target="_blank" href="https://keybase.io/602p">Keybase</a> at 602p. Connect with me on <a target="_blank" href="https://www.linkedin.com/in/louis-goessling-350686135/">LinkedIn</a>.</p>
+								<p>Email: <b><a target="_blank" href="mailto:louis@goessling.com">louis@goessling.com</a></b>.
+								<br/>Services: <a target="_blank" href="https://github.com/602p">GitHub</a>, <a target="_blank" href="https://keybase.io/602p">Keybase</a>, <a target="_blank" href="https://www.linkedin.com/in/louis-goessling-350686135/">LinkedIn</a>.
+								<br/><br/><a href="/key.asc">GPG key</a> fingerprint: <code>D351 334F 0334 9C3B 8D99 4780 6156 C7B5 BA78 9EA7</code>.</p>
 							</div>
 						</div>
 						<div class="row five pct tall"></div>
@@ -137,5 +355,31 @@
 			</div>
 		</div>
 		<div class="five pct tall"></div>
+
+		<div id="umtc-coursework-box" class="white-popup mfp-hide">
+			<div class="popup-inner">
+				Here is an interesting subset of the courses I have taken at the University of Minnesota:<br/><br/>
+				<b>CS Courses</b>
+				<ul>
+					<li>CSCI 2011 - Discrete Mathematics</li>
+					<li>CSCI 2041 - Advanced Programming Principles</li>
+					<li>CSCI 2021 - Machine Architecture &amp; Organization &dagger;</li>
+					<li>CSCI 5106 - Programming Languages &dagger;</li>
+					<li>CSCI 5161 - Introduction to Compilers &dagger;</li>
+				</ul>
+
+				<b>Other Selected Courses</b>
+				<ul>
+					<li>MATH 1271 - Calculus I</li>
+					<li>HSCI 1814 - History of Science: from Aristotle to Newton</li>
+					<li>HSCI 1815 - Making Modern Science: Atoms, Genes, and Quanta</li>
+					<li>AEM 1805 - First Year Projects in Air & Space</li>
+					<li>MATH 1272 - Calculus II &dagger;</li>
+					<li>HSCI 3611 - Enlightenment, Revolution, and the Rise of Modern Science &dagger;</li>
+				</ul>
+
+				&dagger; Currently enrolled or planned; Will be complete Summer 2019.
+			</div>
+		</div>
 	</body>
 </html>
